@@ -54,27 +54,27 @@ class TweetTableViewController: UITableViewController {
         }
     }
     
-    private func hideBackButton() {
-        self.navigationItem.hidesBackButton = true
-        self.navigationController?.tabBarController?.navigationItem.hidesBackButton = true
-        self.navigationItem.setHidesBackButton(true, animated: true)
-        self.tabBarController?.navigationItem.hidesBackButton = true
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem()
-        let backButton = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: navigationController, action: nil)
-        self.navigationItem.leftBarButtonItem = backButton
-        navigationItem.leftBarButtonItem = backButton
-        tabBarController?.navigationItem.leftBarButtonItem = backButton
-        navigationItem.hidesBackButton = true
-        tabBarController?.navigationItem.hidesBackButton = true
-        self.navigationController?.navigationItem.backBarButtonItem?.title = "";
-    }
+//    private func hideBackButton() {
+//        self.navigationItem.hidesBackButton = true
+//        self.navigationController?.tabBarController?.navigationItem.hidesBackButton = true
+//        self.navigationItem.setHidesBackButton(true, animated: true)
+//        self.tabBarController?.navigationItem.hidesBackButton = true
+//        self.navigationItem.leftBarButtonItem = UIBarButtonItem()
+//        let backButton = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: navigationController, action: nil)
+//        self.navigationItem.leftBarButtonItem = backButton
+//        navigationItem.leftBarButtonItem = backButton
+//        tabBarController?.navigationItem.leftBarButtonItem = backButton
+//        navigationItem.hidesBackButton = true
+//        tabBarController?.navigationItem.hidesBackButton = true
+//        self.navigationController?.navigationItem.backBarButtonItem?.title = "";
+//    }
     
-    func back(sender: UIBarButtonItem) {
-        // Perform your custom actions
-        // ...
-        // Go back to the previous ViewController
-        navigationController?.popViewController(animated: true)
-    }
+//    func back(sender: UIBarButtonItem) {
+//        // Perform your custom actions
+//        // ...
+//        // Go back to the previous ViewController
+//        navigationController?.popViewController(animated: true)
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,9 +92,9 @@ class TweetTableViewController: UITableViewController {
             performRequest()
         }
         else {
-            self.navigationItem.hidesBackButton = true
-            let newBackButton = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.plain, target: self, action: #selector(TweetTableViewController.back(sender:)))
-            self.navigationItem.leftBarButtonItem = newBackButton
+//            self.navigationItem.hidesBackButton = true
+//            let newBackButton = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.plain, target: self, action: #selector(TweetTableViewController.back(sender:)))
+//            self.navigationItem.leftBarButtonItem = newBackButton
             performUserTimelineRequest()
         }
         

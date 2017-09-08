@@ -6,21 +6,22 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="247" id="BKh-Zd-HGH" customClass="TweetWithMediaTableViewCell" customModule="Inhalt" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="522" height="247"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="342" id="BKh-Zd-HGH" customClass="TweetWithMediaTableViewCell" customModule="Inhalt" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="522" height="342"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BKh-Zd-HGH" id="Lun-Qu-1Er">
-                <rect key="frame" x="0.0" y="0.0" width="522" height="247"/>
+                <rect key="frame" x="0.0" y="0.0" width="522" height="341.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="X5u-yW-rMO">
-                        <rect key="frame" x="8" y="8" width="506" height="230.5"/>
+                        <rect key="frame" x="8" y="7.5" width="506" height="326"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="RYc-Td-B2F">
                                 <rect key="frame" x="0.0" y="0.0" width="50" height="64.5"/>
@@ -41,7 +42,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="YDy-Zp-eZ7">
-                                <rect key="frame" x="60" y="0.0" width="446" height="211.5"/>
+                                <rect key="frame" x="60" y="0.0" width="446" height="284.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="300" text="Tweeter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Af6-Da-jSk">
                                         <rect key="frame" x="0.0" y="0.0" width="65" height="20.5"/>
@@ -62,9 +63,9 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gdR-pU-LJH">
-                                        <rect key="frame" x="0.0" y="61.5" width="446" height="150"/>
+                                        <rect key="frame" x="0.0" y="61.5" width="446" height="223"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="150" id="Wwr-S3-biC"/>
+                                            <constraint firstAttribute="width" secondItem="gdR-pU-LJH" secondAttribute="height" multiplier="2:1" id="1FT-VI-u6N"/>
                                         </constraints>
                                     </imageView>
                                 </subviews>
@@ -86,12 +87,11 @@
                 <outlet property="createdLabel" destination="DFV-vo-tot" id="4d1-NC-G8k"/>
                 <outlet property="profileImageView" destination="miT-Pa-ZLj" id="ipB-VC-wXE"/>
                 <outlet property="tweetImageView" destination="gdR-pU-LJH" id="KWB-zA-N5e"/>
-                <outlet property="tweetImageViewHeight" destination="Wwr-S3-biC" id="W7g-fi-YyI"/>
                 <outlet property="tweetTextLabel" destination="cDf-65-6l9" id="sO3-qk-uOZ"/>
                 <outlet property="tweeterHandleLabel" destination="QJn-eT-ccc" id="LNq-bX-lt3"/>
                 <outlet property="tweeterNameLabel" destination="Af6-Da-jSk" id="yf7-xx-3wJ"/>
             </connections>
-            <point key="canvasLocation" x="-4" y="-199.5"/>
+            <point key="canvasLocation" x="-4" y="-152"/>
         </tableViewCell>
     </objects>
 </document>

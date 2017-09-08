@@ -29,7 +29,11 @@ class LoginViewController: UIViewController {
     func LoginSuccess() {
         //print("If session is set: \(String(describing: Twitter.sharedInstance().sessionStore.session() ))")
         DispatchQueue.main.async(){
-            self.performSegue(withIdentifier: "Show Tweets After Login", sender: nil)
+//            self.performSegue(withIdentifier: "Show Tweets After Login", sender: nil)
+//            UIView.transition(from: self.view, to: , duration: <#T##TimeInterval#>, options: <#T##UIViewAnimationOptions#>, completion: <#T##((Bool) -> Void)?##((Bool) -> Void)?##(Bool) -> Void#>)
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let homeTabBarController = storyboard.instantiateViewController(withIdentifier: "HomeTabBarController")
+            self.present(homeTabBarController, animated: true, completion: nil)
         }
     }
     

@@ -85,7 +85,7 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.tabBarController?.title = "Search"
+        self.navigationItem.title = "Search"
     }
 
     override func didReceiveMemoryWarning() {

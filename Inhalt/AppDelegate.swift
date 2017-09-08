@@ -20,7 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         Twitter.sharedInstance().start(withConsumerKey:"r8FzHsVqI3GlY23fpCu4pnx9O", consumerSecret:"AqWOdp5xsIhzNKFs8U7JFixHYjYNeVLspfm1AUWH4sHzTR7E4n")
 //        if Twitter.sharedInstance().sessionStore.session() != nil {
-//            self.window = UIWindow
+//            self.window = UIWindow(frame: UIScreen.main.bounds)
+//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//            let initialViewController = storyboard.instantiateViewController(withIdentifier: "HomeTabBarController")
+//            self.window?.rootViewController = initialViewController
+//            self.window?.makeKeyAndVisible()
 //        }
         return true
     }
