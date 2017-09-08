@@ -12,6 +12,7 @@ class TweetTableViewController: UITableViewController {
     
     private var request :Request?
     private var tweets = [Tweet]()
+    public var userID: String? = nil
     
     private var lastTwitterRequest: Request?
     private var refreshRequested: Bool = false
@@ -43,17 +44,17 @@ class TweetTableViewController: UITableViewController {
         }
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.register(UINib(nibName: "TweetTableViewCell", bundle: nil), forCellReuseIdentifier: "tweetCell")
-        tableView.register(UINib(nibName: "TweetWithMediaTableViewCell", bundle: nil), forCellReuseIdentifier: "tweetWithMediaCell")
-        tableView.delegate = self
-        tableView.dataSource = self
-        self.navigationItem.title = "Home"
-        tableView.estimatedRowHeight = tableView.rowHeight
-//        tableView.estimatedRowHeight = 100
-        tableView.rowHeight = UITableViewAutomaticDimension
-//        self.tabBarController?.navigationItem.hidesBackButton = true
+    private func performUserTimelineRequest() {
+        let parameters: Dictionary<String, String> = ["user_id": userID!, "count": "50"]
+        request = lastTwitterRequest?.newer ?? Request("user_timeline", parameters)
+        lastTwitterRequest = request
+        request?.twitterGetRequest(before: showTweets)
+        if refreshRequested {
+            refreshControl?.endRefreshing()
+        }
+    }
+    
+    private func hideBackButton() {
         self.navigationItem.hidesBackButton = true
         self.navigationController?.tabBarController?.navigationItem.hidesBackButton = true
         self.navigationItem.setHidesBackButton(true, animated: true)
@@ -65,20 +66,54 @@ class TweetTableViewController: UITableViewController {
         tabBarController?.navigationItem.leftBarButtonItem = backButton
         navigationItem.hidesBackButton = true
         tabBarController?.navigationItem.hidesBackButton = true
+        self.navigationController?.navigationItem.backBarButtonItem?.title = "";
+    }
+    
+    func back(sender: UIBarButtonItem) {
+        // Perform your custom actions
+        // ...
+        // Go back to the previous ViewController
+        navigationController?.popViewController(animated: true)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         lastTwitterRequest = nil
-        performRequest()
+        tableView.register(UINib(nibName: "TweetTableViewCell", bundle: nil), forCellReuseIdentifier: "tweetCell")
+        tableView.register(UINib(nibName: "TweetWithMediaTableViewCell", bundle: nil), forCellReuseIdentifier: "tweetWithMediaCell")
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.estimatedRowHeight = tableView.rowHeight
+        tableView.rowHeight = UITableViewAutomaticDimension
+        if userID == nil {
+            self.navigationItem.title = "Home"
+    //        self.tabBarController?.navigationItem.hidesBackButton = true
+//            hideBackButton()
+            performRequest()
+        }
+        else {
+            self.navigationItem.hidesBackButton = true
+            let newBackButton = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.plain, target: self, action: #selector(TweetTableViewController.back(sender:)))
+            self.navigationItem.leftBarButtonItem = newBackButton
+            performUserTimelineRequest()
+        }
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.tabBarController?.title = "Home"
-        self.navigationItem.hidesBackButton = true
-
+        if userID == nil {
+            self.tabBarController?.title = "Home"
+        }
+        else {
+            self.navigationItem.title = "Tweets"
+        }
+//        self.navigationItem.hidesBackButton = true
     }
     
     

@@ -145,7 +145,8 @@ public class Request : NSObject {
         "home" : "statuses/home_timeline",
         "tweets" : "statuses",
         "search" : "search/tweets",
-        "following" : "friends/list"
+        "following" : "friends/list",
+        "user_timeline" : "statuses/user_timeline"
     ]
     
     struct TwitterKey {

@@ -65,7 +65,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="FTm-an-E7I"/>
                     <connections>
-                        <segue destination="G6R-89-4u9" kind="show" id="xzd-wl-5Yr"/>
+                        <segue destination="G6R-89-4u9" kind="show" identifier="showUserTweets" id="xzd-wl-5Yr"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bdG-Yg-EOn" userLabel="First Responder" sceneMemberID="firstResponder"/>

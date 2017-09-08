@@ -126,15 +126,24 @@ class FollowingTableViewController: UITableViewController {
         return true
     }
     */
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.performSegue(withIdentifier: "showUserTweets", sender: indexPath)
+    }
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        let destinationViewController = segue.destination
+        if let tweetTableViewController = destinationViewController as? TweetTableViewController {
+            let indexPath = sender as? IndexPath
+            tweetTableViewController.userID = following[(indexPath?.row)!].id
+        }
     }
-    */
+ 
 
 }
