@@ -7,15 +7,19 @@
 //
 
 import UIKit
+import CoreData
 
-class TweetTableViewController: UITableViewController {
+class TweetTableViewController: UITableViewController, TweetTableViewCellProtocol {
     
     private var request :Request?
-    private var tweets = [Tweet]()
+    var tweets = [Tweet]()
+    var tweetData: [NSManagedObject] = []
     public var userID: String? = nil
     
     private var lastTwitterRequest: Request?
     private var refreshRequested: Bool = false
+    
+    
     
     private func showTweets(_ tweets: [Any]) {
 //        if tweets.isEmpty == false {
@@ -28,11 +32,68 @@ class TweetTableViewController: UITableViewController {
 //        print(self.tweets)
     }
     
+    private func saveTweets(_ tweets: [Any]) {
+        
+    }
+    
     @IBAction func refreshControl(_ sender: UIRefreshControl) {
         refreshRequested = true
         performRequest()
     }
-
+    
+    func didPressLikeOrRetweetButton(_ changedTweet: [Any]) -> Void {
+//        let changedTweet = changedTweet[0] as? Tweet
+//        var index: Int?
+//        print("changing tweet")
+//        for indexValue in 0..<tweets.count {
+//            if tweets[indexValue].identifier == changedTweet?.identifier {
+//                tweets[indexValue] = changedTweet!
+//                index = indexValue
+//                break
+//            }
+//        }
+////        let indexPath = IndexPath(item: index!, section: 0)
+//        DispatchQueue.main.async { [weak self] in
+////                self?.tableView?.reloadRows(at: [indexPath], with: .top)
+//            self?.tableView.reloadData()
+//        }
+    }
+    
+    func editCellDataAfterFavorite(_ cell: Any, changeLikeCountTo favoriteCount: Int, changeFavouritedTo favorite: Bool) {
+        let tweetTableViewCell: UITableViewCell
+        if type(of: cell) == TweetTableViewCell.self {
+            tweetTableViewCell = (cell as? TweetTableViewCell)!
+        }
+        else {
+            tweetTableViewCell = (cell as? TweetWithMediaTableViewCell)!
+        }
+        
+        let indexPath = tableView.indexPath(for: tweetTableViewCell)
+        tweets[(indexPath?.row)!].favorited = favorite
+        tweets[(indexPath?.row)!].favouriteCount = favoriteCount
+        DispatchQueue.main.async { [weak self] in
+              self?.tableView?.reloadRows(at: [indexPath!], with: .automatic)
+//            self?.tableView.reloadData()
+        }
+    }
+    
+    func editCellDataAfterRetweet(_ cell: Any, changeRetweetCountTo retweetCount: Int, changeRetweetedTo retweet: Bool) {
+        let tweetTableViewCell: UITableViewCell
+        if type(of: cell) == TweetTableViewCell.self {
+            tweetTableViewCell = (cell as? TweetTableViewCell)!
+        }
+        else {
+            tweetTableViewCell = (cell as? TweetWithMediaTableViewCell)!
+        }
+//        let tweetTableViewCell = cell as? TweetTableViewCell
+        let indexPath = tableView.indexPath(for: tweetTableViewCell)
+        tweets[(indexPath?.row)!].retweeted = retweet
+        tweets[(indexPath?.row)!].retweetCount = retweetCount
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView?.reloadRows(at: [indexPath!], with: .automatic)
+            //            self?.tableView.reloadData()
+        }
+    }
     
     private func performRequest() {
         let parameters: Dictionary<String, String> = ["count": "50"]
@@ -45,7 +106,7 @@ class TweetTableViewController: UITableViewController {
     }
     
     private func performUserTimelineRequest() {
-        let parameters: Dictionary<String, String> = ["user_id": userID!, "count": "50"]
+        let parameters: Dictionary<String, String> = ["user_id": userID!, "count": "50", "include_rts": "false"]
         request = lastTwitterRequest?.newer ?? Request("user_timeline", parameters)
         lastTwitterRequest = request
         request?.twitterGetRequest(before: showTweets)
@@ -142,70 +203,15 @@ class TweetTableViewController: UITableViewController {
 //        let cell: UITableViewCell
         if tweet.media.isEmpty {
             let cell = tableView.dequeueReusableCell(withIdentifier: "tweetCell", for: indexPath) as! TweetTableViewCell
-            cell.tweeterNameLabel?.text = tweet.user.name
-            cell.tweeterHandleLabel?.text = "@" + tweet.user.screenName
-            cell.tweetTextLabel?.text = tweet.text
-            cell.profileImageView?.image = nil
-            let id = tweet.identifier
-            DispatchQueue.global(qos: .userInitiated).async {
-                let profileImageUrl = tweet.user.profileImageUrl
-                if let imageData = try? Data(contentsOf: profileImageUrl) {
-                    DispatchQueue.main.async {
-                        if id == tweet.identifier {
-                            cell.profileImageView?.image = UIImage(data: imageData)
-                        }
-                    }
-                }
-            }
-    
-            let created = tweet.created
-            let formatter = DateFormatter()
-            if Date().timeIntervalSince(created) > 24*60*60 {
-                formatter.dateStyle = .short
-            } else {
-                formatter.timeStyle = .short
-            }
-            cell.createdLabel?.text = formatter.string(from: created)
+            cell.tweet = tweet
+            cell.tweetDataDelegate = self
             return cell
         }
         else{
             let cell = tableView.dequeueReusableCell(withIdentifier: "tweetWithMediaCell", for: indexPath) as! TweetWithMediaTableViewCell
-            cell.tweeterNameLabel?.text = tweet.user.name
-            cell.tweeterHandleLabel?.text = "@" + tweet.user.screenName
-            cell.tweetTextLabel?.text = tweet.text
-            cell.profileImageView?.image = nil
-            let id = tweet.identifier
-            DispatchQueue.global(qos: .userInitiated).async {
-                let profileImageUrl = tweet.user.profileImageUrl
-                if let imageData = try? Data(contentsOf: profileImageUrl) {
-                    DispatchQueue.main.async {
-                        if id == tweet.identifier {
-                            cell.profileImageView?.image = UIImage(data: imageData)
-                        }
-                    }
-                }
-            }
-            
-            let created = tweet.created
-            let formatter = DateFormatter()
-            if Date().timeIntervalSince(created) > 24*60*60 {
-                formatter.dateStyle = .short
-            } else {
-                formatter.timeStyle = .short
-            }
-            cell.createdLabel?.text = formatter.string(from: created)
-            cell.tweetImageView?.image = UIImage(named: "blue22")
-            DispatchQueue.global(qos: .userInteractive).async {
-                let imageMediaUrl = tweet.media[0].url
-                if let imageData = try? Data(contentsOf: imageMediaUrl) {
-                    DispatchQueue.main.async {
-                        if id == tweet.identifier {
-                                cell.tweetImageView?.image = UIImage(data: imageData)
-                        }
-                    }
-                }
-            }
-//            if let tweetCell = cell as? TweetWithMediaTableViewCell {
+            cell.tweet = tweet
+            cell.tweetDataDelegate = self
+            //            if let tweetCell = cell as? TweetWithMediaTableViewCell {
 //                tweetCell.tweet = tweet
 //            }
             return cell

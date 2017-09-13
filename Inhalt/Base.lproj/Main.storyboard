@@ -77,7 +77,7 @@
         <scene sceneID="kvH-qm-QRW">
             <objects>
                 <tableViewController id="WFE-TF-BnU" customClass="SearchTweetsTableViewController" customModule="Inhalt" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="112" sectionHeaderHeight="28" sectionFooterHeight="28" id="oUO-qr-Q1l">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="55" sectionHeaderHeight="28" sectionFooterHeight="28" id="oUO-qr-Q1l">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -86,8 +86,30 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="yes" keyboardType="twitter" keyboardAppearance="alert" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
                         </searchBar>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="searchTrendCell" textLabel="3EC-1v-jks" rowHeight="55" style="IBUITableViewCellStyleDefault" id="dae-cx-hHB" customClass="SearchTrendTableViewCell" customModule="Inhalt" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="72" width="414" height="55"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dae-cx-hHB" id="toS-5X-RJc">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="54.666666666666664"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Trend" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3EC-1v-jks">
+                                            <rect key="frame" x="15" y="0.0" width="384" height="54.666666666666664"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="searchTrendLabel" destination="3EC-1v-jks" id="ZZO-SR-xF3"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
                         <connections>
-                            <outlet property="dataSource" destination="WFE-TF-BnU" id="5Oo-VR-kLv"/>
+                            <outlet property="dataSource" destination="WFE-TF-BnU" id="O3G-WD-bT1"/>
                             <outlet property="delegate" destination="WFE-TF-BnU" id="s41-rv-OyD"/>
                         </connections>
                     </tableView>
@@ -215,6 +237,6 @@
         <image name="icons8-Home-50" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="xzd-wl-5Yr"/>
+        <segue reference="Zbb-do-D7S"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -8,19 +8,37 @@
 
 import UIKit
 
-class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegate {
+class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegate, TweetTableViewCellProtocol {
     
     private var lastTwitterRequest: Request?
     private var refreshRequested: Bool = false
     private var request: Request?
     private var tweets = [Tweet]()
-
+    private var trends = [String]()
+    
     private var searchTerm: String? {
         didSet{
             tweetSearchBar?.resignFirstResponder()
             lastTwitterRequest = nil
             performSearchRequest()
         }
+    }
+    
+    func didPressLikeOrRetweetButton(_ changedTweet: [Any]) -> Void {
+//        let changedTweet = changedTweet[0] as? Tweet
+//        print("changing tweet")
+//        var index: Int?
+//        for indexValue in 0..<tweets.count {
+//            if tweets[indexValue].identifier == changedTweet?.identifier {
+//                tweets[indexValue] = changedTweet!
+//                index = indexValue
+//                break
+//            }
+//        }
+////        let indexPath = IndexPath(item: index!, section: 0)
+//        DispatchQueue.main.async { [weak self] in
+//            self?.tableView.reloadData()
+//        }
     }
     
 //    @IBOutlet weak var searchTextField: UITextField! {
@@ -37,12 +55,54 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
 //        return true
 //    }
     
+    func editCellDataAfterFavorite(_ cell: Any, changeLikeCountTo favoriteCount: Int, changeFavouritedTo favorite: Bool) {
+        let tweetTableViewCell: UITableViewCell
+        if type(of: cell) == TweetTableViewCell.self {
+            tweetTableViewCell = (cell as? TweetTableViewCell)!
+        }
+        else {
+            tweetTableViewCell = (cell as? TweetWithMediaTableViewCell)!
+        }
+        let indexPath = tableView.indexPath(for: tweetTableViewCell)
+        tweets[(indexPath?.row)!].favorited = favorite
+        tweets[(indexPath?.row)!].favouriteCount = favoriteCount
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView?.reloadRows(at: [indexPath!], with: .automatic)
+            //            self?.tableView.reloadData()
+        }
+    }
+    
+    func editCellDataAfterRetweet(_ cell: Any, changeRetweetCountTo retweetCount: Int, changeRetweetedTo retweet: Bool) {
+        let tweetTableViewCell: UITableViewCell
+        if type(of: cell) == TweetTableViewCell.self {
+            tweetTableViewCell = (cell as? TweetTableViewCell)!
+        }
+        else {
+            tweetTableViewCell = (cell as? TweetWithMediaTableViewCell)!
+        }
+        let indexPath = tableView.indexPath(for: tweetTableViewCell)
+        tweets[(indexPath?.row)!].retweeted = retweet
+        tweets[(indexPath?.row)!].retweetCount = retweetCount
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView?.reloadRows(at: [indexPath!], with: .automatic)
+            //            self?.tableView.reloadData()
+        }
+    }
+    
     private func showTweets(_ tweets: [Any]) {
         self.tweets = tweets as! [Tweet]
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
         }
         print(self.tweets)
+    }
+    
+    private func showTrends(_ trends: [Any]) {
+        self.trends = trends as! [String]
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
+        }
+        print(trends)
     }
     
     @IBAction func refreshControl(_ sender: Any) {
@@ -67,8 +127,15 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
         }
     }
     
+    private func performTrendsRequest() {
+        let parameters: Dictionary<String, String> = ["id": "1"]
+        request = Request("trends", parameters)
+        request?.twitterGetRequest(before: showTrends)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        performTrendsRequest()
         tableView.register(UINib(nibName: "TweetTableViewCell", bundle: nil), forCellReuseIdentifier: "tweetCell")
         tableView.register(UINib(nibName: "TweetWithMediaTableViewCell", bundle: nil), forCellReuseIdentifier: "tweetWithMediaCell")
         tweetSearchBar.delegate = self
@@ -102,80 +169,44 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return tweets.count
+        if searchTerm == nil {
+            return trends.count
+        }
+        else {
+            return tweets.count
+        }
     }
-
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let tweet = tweets[indexPath.row]
-        if tweet.media.isEmpty {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "tweetCell", for: indexPath) as! TweetTableViewCell
-            cell.tweeterNameLabel?.text = tweet.user.name
-            cell.tweeterHandleLabel?.text = "@" + (tweet.user.screenName)
-            cell.tweetTextLabel?.text = tweet.text
-            cell.profileImageView.image = nil
-            let id = tweet.identifier
-            DispatchQueue.global(qos: .userInteractive).async {
-                let profileImageUrl = tweet.user.profileImageUrl
-                if let imageData = try? Data(contentsOf: profileImageUrl) {
-                    DispatchQueue.main.async {
-                        if id == tweet.identifier {
-                            cell.profileImageView?.image = UIImage(data: imageData)
-                        }
-                    }
-                }
+        if searchTerm == nil {
+            let cell =  tableView.dequeueReusableCell(withIdentifier: "searchTrendCell", for: indexPath)
+            let trend = trends[indexPath.row]
+            if let searchTrendCell = cell as? SearchTrendTableViewCell {
+                searchTrendCell.trend = trend
             }
-            
-            let created = tweet.created
-            let formatter = DateFormatter()
-            if Date().timeIntervalSince(created) > 24*60*60 {
-                formatter.dateStyle = .short
-            } else {
-                formatter.timeStyle = .short
-            }
-            cell.createdLabel?.text = formatter.string(from: created)
             
             return cell
         }
-        else{
-            let cell = tableView.dequeueReusableCell(withIdentifier: "tweetWithMediaCell", for: indexPath) as! TweetWithMediaTableViewCell
-            cell.tweeterNameLabel?.text = tweet.user.name
-            cell.tweeterHandleLabel?.text = "@" + (tweet.user.screenName)
-            cell.tweetTextLabel?.text = tweet.text
-            cell.profileImageView.image = nil
-            let id = tweet.identifier
-            DispatchQueue.global(qos: .userInteractive).async {
-                let profileImageUrl = tweet.user.profileImageUrl
-                if let imageData = try? Data(contentsOf: profileImageUrl) {
-                    DispatchQueue.main.async {
-                        if id == tweet.identifier {
-                            cell.profileImageView?.image = UIImage(data: imageData)
-                        }
-                    }
-                }
+        else {
+            let tweet = tweets[indexPath.row]
+            if tweet.media.isEmpty {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "tweetCell", for: indexPath) as! TweetTableViewCell
+                cell.tweet = tweet
+                cell.tweetDataDelegate = self
+                return cell
             }
-            
-            let created = tweet.created
-            let formatter = DateFormatter()
-            if Date().timeIntervalSince(created) > 24*60*60 {
-                formatter.dateStyle = .short
-            } else {
-                formatter.timeStyle = .short
+            else{
+                let cell = tableView.dequeueReusableCell(withIdentifier: "tweetWithMediaCell", for: indexPath) as! TweetWithMediaTableViewCell
+                cell.tweet = tweet
+                cell.tweetDataDelegate = self
+                return cell
             }
-            cell.tweetImageView?.image = UIImage(named: "blue22")
-            cell.createdLabel?.text = formatter.string(from: created)
-            DispatchQueue.global(qos: .userInteractive).async {
-                let imageMediaUrl = tweet.media[0].url
-                if let imageData = try? Data(contentsOf: imageMediaUrl) {
-                    DispatchQueue.main.async {
-                        if id == tweet.identifier {
-                            cell.tweetImageView?.image = UIImage(data: imageData)
-                        }
-                    }
-                }
-            }
-
-            return cell
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if searchTerm == nil {
+            searchTerm = trends[indexPath.row]
         }
     }
  

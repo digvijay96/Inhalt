@@ -14,6 +14,11 @@ public struct Tweet {
     public let created: Date
     public let identifier: String
     public let media: [MediaItem]
+    public var favorited: Bool
+    public var retweeted: Bool
+    public var favouriteCount: Int
+    public var retweetCount: Int
+    
     
     init?(data: NSDictionary?)
     {
@@ -22,7 +27,11 @@ public struct Tweet {
             let text = data?.value(forKeyPath: TwitterKey.text) as? String,
             //let text = data?.string(forKeyPath: TwitterKey.text),
             let created = twitterDateFormatter.date(from: data?.value(forKeyPath: TwitterKey.created) as? String ?? ""),
-            let identifier = data?.value(forKeyPath: TwitterKey.identifier) as? String
+            let identifier = data?.value(forKeyPath: TwitterKey.identifier) as? String,
+            let favorited = data?.value(forKeyPath: TwitterKey.favorited) as? Bool,
+            let retweeted = data?.value(forKeyPath: TwitterKey.retweeted) as? Bool,
+            let favouriteCount = data?.value(forKeyPath: TwitterKey.favourites) as?Int,
+            let retweetCount = data?.value(forKeyPath: TwitterKey.retweets) as? Int
             else {
                 return nil
             }
@@ -31,6 +40,10 @@ public struct Tweet {
         self.text = text
         self.created = created
         self.identifier = identifier
+        self.favorited = favorited
+        self.retweeted = retweeted
+        self.favouriteCount = favouriteCount
+        self.retweetCount = retweetCount
         self.media = Tweet.mediaItems(from: data?.value(forKeyPath: TwitterKey.media) as? NSArray)
     }
     
@@ -52,6 +65,10 @@ public struct Tweet {
         static let created = "created_at"
         static let identifier = "id_str"
         static let media = "entities.media"
+        static let favorited = "favorited"
+        static let retweeted = "retweeted"
+        static let favourites = "favorite_count"
+        static let retweets = "retweet_count"
     }
     
 }

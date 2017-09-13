@@ -68,6 +68,37 @@ public class Request : NSObject {
         return following
     }
     
+    private func parseTrends(_ results: Any?) -> [String] {
+        var trends = [String]()
+        if let array = results as? NSArray {
+            if let dictionary = array[0] as? NSDictionary {
+                if let trendsArray = dictionary[TwitterKey.trends] as? NSArray {
+                    for trend in trendsArray {
+                        if let trendDictionary =  trend as? NSDictionary{
+                            trends.append((trendDictionary[TwitterKey.name] as? String)!)
+                        }
+                    }
+                    
+                }
+            }
+        }
+        return trends
+    }
+    
+    private func parseData (_ results: Any?) -> [Any] {
+        var parsedResults: [Any]
+        switch requestType {
+        case "following":
+            parsedResults = parseUsers(results)
+        case "trends":
+            parsedResults = parseTrends(results)
+        default:
+//            print(results)
+            parsedResults = parseTweets(results)
+        }
+        return parsedResults
+    }
+    
     public var newer: Request? {
         if max_id == nil {
             if parameters[Key.sinceID] != nil {
@@ -89,7 +120,11 @@ public class Request : NSObject {
     }
     
     public func twitterGetRequest(before handler: @escaping ([Any]) -> Void) {
-        performGetRequest(RequestTypes[requestType]!, handler: handler)
+        performRequest(RequestTypes[requestType]!, "GET", handler: handler)
+    }
+    
+    public func twitterPostRequest(before handler: @escaping ([Any]) -> Void) {
+        performRequest(RequestTypes[requestType]!, "POST" ,handler: handler)
     }
     
 //    public func getFollowers(before handler: @escaping ([User]) -> Void){
@@ -97,27 +132,29 @@ public class Request : NSObject {
 //        performGetRequest(RequestTypes.followers, handler: handler)
 //    }
     
-    public func performGetRequest(_ requestType: String, handler: @escaping ([Any]) -> Void) {
+    public func performRequest(_ requestType: String,_ requestMethod: String, handler: @escaping ([Any]) -> Void) {
         if let twitterAccountId = Twitter.sharedInstance().sessionStore.session()?.userID {
             let client = TWTRAPIClient(userID: twitterAccountId)
             let requestURL = Constants.twitterURLPrefix + requestType + Constants.JSONExtension
             var clientError : NSError?
 
-            let request = client.urlRequest(withMethod: "GET", url: requestURL, parameters: parameters, error: &clientError)
+            let request = client.urlRequest(withMethod: requestMethod, url: requestURL, parameters: parameters, error: &clientError)
             DispatchQueue.main.async {
                 client.sendTwitterRequest(request) { [weak self] (response, responseData, error) -> Void in
                     if let err = error {
                         print("Error: \(err.localizedDescription)")
                     } else {
                         let responseJsonData = try? JSONSerialization.jsonObject(with: responseData!, options: [])
+//                        print("network call")
                         //let backToString = String(data: responseData!, encoding: String.Encoding.utf8) as String!
-//                        print(responseJsonData ?? "Not set")
-                        if self?.requestType == "following" {
-                            handler((self?.parseUsers(responseJsonData))!)
-                        }
-                        else{
-                            handler((self?.parseTweets(responseJsonData))!)
-                        }
+                        print(responseJsonData ?? "Not set")
+//                        if self?.requestType == "following" {
+//                            handler((self?.parseUsers(responseJsonData))!)
+//                        }
+//                        else{
+//                            handler((self?.parseTweets(responseJsonData))!)
+//                        }
+                        handler((self?.parseData(responseJsonData))!)
             //                      handler(responseJsonData)
                         //print(backToString ?? "Not converted")
                         //print("User Timeline: \(responseData ?? ))")
@@ -129,7 +166,6 @@ public class Request : NSObject {
         // Not logged in
         }
     }
-    
     
     private struct Constants {
         static let JSONExtension = ".json"
@@ -146,13 +182,24 @@ public class Request : NSObject {
         "tweets" : "statuses",
         "search" : "search/tweets",
         "following" : "friends/list",
-        "user_timeline" : "statuses/user_timeline"
+        "user_timeline" : "statuses/user_timeline",
+        "trends" : "trends/place",
+        "favorite" : "favorites/create",
+        "remove_favorite" : "favorites/destroy",
+        "retweet" : "statuses/retweet",
+        "undo_retweet" : "statuses/unretweet"
     ]
+    
+    struct HandlerFunction {
+        static let tweets = parseTweets
+    }
     
     struct TwitterKey {
 //        static let home = "statuses/home_timeline"
         static let tweets = "statuses"
         static let users = "users"
+        static let trends = "trends"
+        static let name = "name"
 //        static let search = "search/tweets"
 //        static let following = "friends/list"
     }
