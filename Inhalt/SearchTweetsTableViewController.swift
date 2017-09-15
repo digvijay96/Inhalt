@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegate, TweetTableViewCellProtocol {
     
@@ -15,6 +16,7 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
     private var request: Request?
     private var tweets = [Tweet]()
     private var trends = [String]()
+
     
     private var searchTerm: String? {
         didSet{
@@ -94,7 +96,8 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
         }
-        print(self.tweets)
+
+//        print(self.tweets)
     }
     
     private func showTrends(_ trends: [Any]) {

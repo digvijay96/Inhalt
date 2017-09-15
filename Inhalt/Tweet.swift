@@ -9,11 +9,11 @@
 import Foundation
 
 public struct Tweet {
-    public let text: String
-    public let user: User
-    public let created: Date
-    public let identifier: String
-    public let media: [MediaItem]
+    public var text: String
+    public var user: User
+    public var created: Date
+    public var identifier: String
+    public var media: [MediaItem]
     public var favorited: Bool
     public var retweeted: Bool
     public var favouriteCount: Int
@@ -45,6 +45,23 @@ public struct Tweet {
         self.favouriteCount = favouriteCount
         self.retweetCount = retweetCount
         self.media = Tweet.mediaItems(from: data?.value(forKeyPath: TwitterKey.media) as? NSArray)
+    }
+    
+    init(_ tweet: TweetData) {
+        self.user = User(tweet.tweeter!)
+        self.text = tweet.text!
+        self.created = tweet.created! as Date
+        self.identifier = tweet.identifier!
+        self.favorited = tweet.favorited
+        self.retweeted = tweet.retweeted
+        self.favouriteCount = Int(tweet.favouriteCount)
+        self.retweetCount = Int(tweet.retweetCount)
+        if tweet.mediaUrl != "" {
+            self.media = [MediaItem(tweet.mediaUrl!)]
+        }
+        else{
+            self.media = []
+        }
     }
     
     private static func mediaItems(from twitterData: NSArray?) -> [MediaItem]{

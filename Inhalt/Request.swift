@@ -16,6 +16,7 @@ public class Request : NSObject {
     
     public let requestType: String
     public let parameters: Dictionary<String, String>
+    static var requestCompleted = true
     
     public init(_ requestType: String, _ parameters: Dictionary<String, String> = [:]){
         self.requestType = requestType
@@ -64,7 +65,7 @@ public class Request : NSObject {
                 }
             }
         }
-        print(following)
+//        print(following)
         return following
     }
     
@@ -154,11 +155,15 @@ public class Request : NSObject {
 //                        else{
 //                            handler((self?.parseTweets(responseJsonData))!)
 //                        }
-                        handler((self?.parseData(responseJsonData))!)
+                        if Request.requestCompleted {
+                            Request.requestCompleted = false
+                            handler((self?.parseData(responseJsonData))!)
+                        }
             //                      handler(responseJsonData)
                         //print(backToString ?? "Not converted")
                         //print("User Timeline: \(responseData ?? ))")
                     }
+                    Request.requestCompleted = true
                 }
             }
         } else {

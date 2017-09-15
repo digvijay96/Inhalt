@@ -9,8 +9,8 @@
 import Foundation
 
 public struct MediaItem {
-    public let url: URL
-    public let aspectRatio: Double
+    public var url: URL
+    public var aspectRatio: Double?
     
     init?(data: NSDictionary?) {
         guard
@@ -23,6 +23,12 @@ public struct MediaItem {
         let convertedUrl = URL(string: urlString)
         self.url = convertedUrl!
         self.aspectRatio = width/height
+    }
+    
+    init(_ mediaItemUrl: String) {
+        let convertedUrl = URL(string: mediaItemUrl)
+        self.url = convertedUrl!
+        self.aspectRatio = 2.0
     }
     
     struct TwitterKey {

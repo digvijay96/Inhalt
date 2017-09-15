@@ -16,7 +16,6 @@ class TweetWithMediaTableViewCell: UITableViewCell {
     @IBOutlet weak var tweeterHandleLabel: UILabel!
     @IBOutlet weak var tweetTextLabel: UILabel!
     @IBOutlet weak var tweetImageView: UIImageView!
-    @IBOutlet weak var tweetImageViewHeight: NSLayoutConstraint!
     
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var likeCountLabel: UILabel!

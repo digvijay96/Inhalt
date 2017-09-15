@@ -30,15 +30,14 @@ class TweetTableViewCell: UITableViewCell {
     var tweetDataDelegate: TweetTableViewCellProtocol?
     
     private func updateUI() {
-//        print("updating tweet data")
         tweeterNameLabel?.text = tweet?.user.name
         tweeterHandleLabel?.text = "@" + (tweet?.user.screenName)!
         tweetTextLabel?.text = tweet?.text
         profileImageView?.image = nil
         likeCountLabel.text = String((tweet?.favouriteCount)!)
         retweetCountLabel.text = String((tweet?.retweetCount)!)
-        print(tweet?.text ?? "")
-        print(tweet?.favorited ?? "")
+//        print(tweet?.text ?? "")
+//        print(tweet?.favorited ?? "")
         if (tweet?.favorited)! {
             likeButton.setImage(UIImage(named: "Liked"), for: .normal)
         }

@@ -7,16 +7,25 @@
 //
 
 import UIKit
+import CoreData
 
 class FollowingTableViewController: UITableViewController {
     
     private var request :Request?
     private var following = [User]()
+    private var followingData = [UserData]()
+    var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     
     private func showUsers(_ following: [Any]) {
         self.following = following as! [User]
-        DispatchQueue.main.async { [weak self] in
-            self?.tableView.reloadData()
+        container?.performBackgroundTask{ [weak self] context in
+            for userInfo in (self?.following)! {
+                _ = try? UserData.findOrCreateTwitterUser(matching: userInfo, in: context)
+                //                print("This is tweety")
+                //                print(tweety ?? "tweety not found")
+            }
+            try? context.save()
+            //            self?.printDatabaseStatistics()
         }
     }
     
@@ -24,6 +33,23 @@ class FollowingTableViewController: UITableViewController {
         let parameters: Dictionary<String, String> = ["skip_status": "true"]
         request = Request("following", parameters)
         request?.twitterGetRequest(before: showUsers)
+    }
+    
+    func reloadFollowingData() {
+        self.followingData = try! UserData.getAllFollowingUsers(in: (container?.viewContext)!)
+        if (self.followingData.count) > 0 {
+            //            print(self.tweetData)
+            self.following = []
+            for followingUser in self.followingData {
+                self.following.append(User(followingUser))
+            }
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+        else  {
+            performRequest()
+        }
     }
 
     override func viewDidLoad() {
@@ -35,8 +61,13 @@ class FollowingTableViewController: UITableViewController {
         self.tabBarController?.title = "Following"
         tableView.estimatedRowHeight = 90
         tableView.rowHeight = UITableViewAutomaticDimension
+        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {[weak self] notification in
+            self?.reloadFollowingData()
+            }
+        )
+        reloadFollowingData()
 //        tableView.rowHeight = 90
-        performRequest()
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 

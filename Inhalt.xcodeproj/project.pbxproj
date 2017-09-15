@@ -18,6 +18,8 @@
 		9F1988E11F62B73300143FD0 /* SearchTrendTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1988E01F62B73300143FD0 /* SearchTrendTableViewCell.swift */; };
 		9F90E3FF1F66DC0E0056FC1F /* TweetTableViewCellProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F90E3FE1F66DC0E0056FC1F /* TweetTableViewCellProtocol.swift */; };
 		9F90E4011F692B7D0056FC1F /* TweetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F90E4001F692B7D0056FC1F /* TweetData.swift */; };
+		9F90E4031F693CBE0056FC1F /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F90E4021F693CBE0056FC1F /* UserData.swift */; };
+		9F90E4051F693CCD0056FC1F /* Trend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F90E4041F693CCD0056FC1F /* Trend.swift */; };
 		9FB4EC481F5D6D030095C868 /* MediaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB4EC471F5D6D030095C868 /* MediaItem.swift */; };
 		9FB4EC4D1F5D922C0095C868 /* TweetWithMediaTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB4EC4C1F5D922C0095C868 /* TweetWithMediaTableViewCell.swift */; };
 		9FEA3E781F5451B700FBC1FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA3E771F5451B700FBC1FB /* AppDelegate.swift */; };
@@ -67,6 +69,8 @@
 		9F1988E01F62B73300143FD0 /* SearchTrendTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTrendTableViewCell.swift; sourceTree = "<group>"; };
 		9F90E3FE1F66DC0E0056FC1F /* TweetTableViewCellProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetTableViewCellProtocol.swift; sourceTree = "<group>"; };
 		9F90E4001F692B7D0056FC1F /* TweetData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetData.swift; sourceTree = "<group>"; };
+		9F90E4021F693CBE0056FC1F /* UserData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		9F90E4041F693CCD0056FC1F /* Trend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trend.swift; sourceTree = "<group>"; };
 		9FB4EC471F5D6D030095C868 /* MediaItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaItem.swift; sourceTree = "<group>"; };
 		9FB4EC4C1F5D922C0095C868 /* TweetWithMediaTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetWithMediaTableViewCell.swift; sourceTree = "<group>"; };
 		9FEA3E741F5451B700FBC1FB /* Inhalt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Inhalt.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -146,6 +150,17 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		9F90E4061F6A63560056FC1F /* Core Data Elements */ = {
+			isa = PBXGroup;
+			children = (
+				9F90E4001F692B7D0056FC1F /* TweetData.swift */,
+				9F90E4021F693CBE0056FC1F /* UserData.swift */,
+				9F90E4041F693CCD0056FC1F /* Trend.swift */,
+				9FEA3E7E1F5451B700FBC1FB /* Inhalt.xcdatamodeld */,
+			);
+			name = "Core Data Elements";
+			sourceTree = "<group>";
+		};
 		9FB4EC491F5D8E5B0095C868 /* SDK */ = {
 			isa = PBXGroup;
 			children = (
@@ -207,7 +222,7 @@
 		9FEA3E761F5451B700FBC1FB /* Inhalt */ = {
 			isa = PBXGroup;
 			children = (
-				9F90E4001F692B7D0056FC1F /* TweetData.swift */,
+				9F90E4061F6A63560056FC1F /* Core Data Elements */,
 				9F90E3FE1F66DC0E0056FC1F /* TweetTableViewCellProtocol.swift */,
 				9FB4EC4B1F5D8EC30095C868 /* TableView Cells */,
 				9FB4EC4A1F5D8E910095C868 /* Controllers */,
@@ -217,7 +232,6 @@
 				9FEA3E811F5451B700FBC1FB /* Assets.xcassets */,
 				9FEA3E831F5451B700FBC1FB /* LaunchScreen.storyboard */,
 				9FEA3E861F5451B700FBC1FB /* Info.plist */,
-				9FEA3E7E1F5451B700FBC1FB /* Inhalt.xcdatamodeld */,
 			);
 			path = Inhalt;
 			sourceTree = "<group>";
@@ -554,8 +568,10 @@
 				9FEA3E781F5451B700FBC1FB /* AppDelegate.swift in Sources */,
 				9F1988D41F5FDCEA00143FD0 /* TweetTableViewCell.swift in Sources */,
 				9FEA3EB31F57ED1700FBC1FB /* User.swift in Sources */,
+				9F90E4051F693CCD0056FC1F /* Trend.swift in Sources */,
 				9FB4EC4D1F5D922C0095C868 /* TweetWithMediaTableViewCell.swift in Sources */,
 				9F90E3FF1F66DC0E0056FC1F /* TweetTableViewCellProtocol.swift in Sources */,
+				9F90E4031F693CBE0056FC1F /* UserData.swift in Sources */,
 				9F90E4011F692B7D0056FC1F /* TweetData.swift in Sources */,
 				9FEA3EB71F583CB900FBC1FB /* SearchTweetsTableViewController.swift in Sources */,
 				9FB4EC481F5D6D030095C868 /* MediaItem.swift in Sources */,
