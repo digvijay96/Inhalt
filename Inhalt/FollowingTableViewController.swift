@@ -20,7 +20,7 @@ class FollowingTableViewController: UITableViewController {
         self.following = following as! [User]
         container?.performBackgroundTask{ [weak self] context in
             for userInfo in (self?.following)! {
-                _ = try? UserData.findOrCreateTwitterUser(matching: userInfo, in: context)
+                _ = try? UserData.findOrCreate(matching: userInfo, in: context)
                 //                print("This is tweety")
                 //                print(tweety ?? "tweety not found")
             }
@@ -107,17 +107,19 @@ class FollowingTableViewController: UITableViewController {
         cell.tweeterHandleLabel?.text = followingUser.screenName
         cell.tweeterDescriptionLabel?.text = followingUser.description
         cell.profileImageView?.image = nil
-        let id = followingUser.id
-        DispatchQueue.global(qos: .userInitiated).async {
-            let profileImageUrl = followingUser.profileImageUrl
-            if let imageData = try? Data(contentsOf: profileImageUrl) {
-                DispatchQueue.main.async {
-                    if id == followingUser.id {
-                        cell.profileImageView?.image = UIImage(data: imageData)
-                    }
-                }
-            }
-        }
+        let profileImageUrl = followingUser.profileImageUrl
+        cell.profileImageView.sd_setImage(with: profileImageUrl, placeholderImage: nil)
+        
+//        DispatchQueue.global(qos: .userInitiated).async {
+//            let profileImageUrl = followingUser.profileImageUrl
+//            if let imageData = try? Data(contentsOf: profileImageUrl) {
+//                DispatchQueue.main.async {
+//                    if id == followingUser.id {
+//                        cell.profileImageView?.image = UIImage(data: imageData)
+//                    }
+//                }
+//            }
+//        }
 
         return cell
     }

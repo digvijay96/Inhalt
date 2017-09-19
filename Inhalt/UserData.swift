@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 class UserData: NSManagedObject {
-    static func findOrCreateTwitterUser(matching userInfo: User, in context: NSManagedObjectContext) throws -> UserData {
+    static func findOrCreate(matching userInfo: User, in context: NSManagedObjectContext) throws -> UserData {
         let request: NSFetchRequest<UserData> = UserData.fetchRequest()
         request.predicate = NSPredicate(format: "screenName = %@", userInfo.screenName)
         do {

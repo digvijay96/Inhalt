@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class TweetTableViewController: UITableViewController, TweetTableViewCellProtocol {
+class TweetTableViewController: FetchedResultsTableViewController, TweetTableViewCellProtocol {
     
     private var request :Request?
     var tweets = [Tweet]()
@@ -18,6 +18,8 @@ class TweetTableViewController: UITableViewController, TweetTableViewCellProtoco
     private var lastTwitterRequest: Request?
     private var refreshRequested: Bool = false
     var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
+    var fetchedResultsController: NSFetchedResultsController<TweetData>?
+    var cache: NSCache<AnyObject, AnyObject>?
     
     private func saveTweets(_ tweets: [Any]) {
 //        if tweets.isEmpty == false {
@@ -27,19 +29,16 @@ class TweetTableViewController: UITableViewController, TweetTableViewCellProtoco
 //        var oldTweets = try? TweetData.getAllTweets(in: (container?.viewContext)!)
         
         container?.performBackgroundTask{ [weak self] context in
-            let oldTweets = try? TweetData.getAllTweets(in: context)
-            for tweet in oldTweets! {
-                print(tweet)
-                if Date().timeIntervalSince(tweet.created! as Date) > 24*60*60*2 {
-                    context.delete(tweet)
-                }
-            }
+//            let oldTweets = try? TweetData.getAllTweets(in: context)
+//            for tweet in oldTweets! {
+////                print(tweet)
+//                if Date().timeIntervalSince(tweet.created! as Date) > 24*60*60*2 {
+//                    context.delete(tweet)
+//                }
+//            }
             for tweetInfo in (self?.tweets)! {
-                let tweet = try? TweetData.findOrCreateTweet(matching: tweetInfo, in: context)
-                tweet?.setValue(tweetInfo.favorited, forKey: "favorited")
-                tweet?.setValue(tweetInfo.favouriteCount, forKey: "favouriteCount")
-                tweet?.setValue(tweetInfo.retweeted, forKey: "retweeted")
-                tweet?.setValue(tweetInfo.retweetCount, forKey: "retweetCount")
+                _ = try? TweetData.findOrCreate(matching: tweetInfo, in: context)
+//                print(tweet)
 //                print("This is tweety")
 //                print(tweety ?? "tweety not found")
             }
@@ -106,12 +105,23 @@ class TweetTableViewController: UITableViewController, TweetTableViewCellProtoco
         }
         
         let indexPath = tableView.indexPath(for: tweetTableViewCell)
-        tweets[(indexPath?.row)!].favorited = favorite
-        tweets[(indexPath?.row)!].favouriteCount = favoriteCount
-        DispatchQueue.main.async { [weak self] in
-              self?.tableView?.reloadRows(at: [indexPath!], with: .automatic)
-//            self?.tableView.reloadData()
+        let changedTweet = fetchedResultsController?.object(at: indexPath!)
+        container?.performBackgroundTask{context in
+            let tweet = try? TweetData.findOrCreate(matching: Tweet(changedTweet!), in: context)
+            print(tweet?.text ?? "tweet not found")
+            print("favorite changed")
+            tweet?.favorited = favorite
+            tweet?.favouriteCount = Int64(favoriteCount)
+//            print(tweet?.favouriteCount)
+            print(self.fetchedResultsController?.delegate ?? "Not found")
+            try? context.save()
         }
+//        tweets[(indexPath?.row)!].favorited = favorite
+//        tweets[(indexPath?.row)!].favouriteCount = favoriteCount
+//        DispatchQueue.main.async { [weak self] in
+//              self?.tableView?.reloadRows(at: [indexPath!], with: .automatic)
+////            self?.tableView.reloadData()
+//        }
     }
     
     func editCellDataAfterRetweet(_ cell: Any, changeRetweetCountTo retweetCount: Int, changeRetweetedTo retweet: Bool) {
@@ -124,12 +134,21 @@ class TweetTableViewController: UITableViewController, TweetTableViewCellProtoco
         }
 //        let tweetTableViewCell = cell as? TweetTableViewCell
         let indexPath = tableView.indexPath(for: tweetTableViewCell)
-        tweets[(indexPath?.row)!].retweeted = retweet
-        tweets[(indexPath?.row)!].retweetCount = retweetCount
-        DispatchQueue.main.async { [weak self] in
-            self?.tableView?.reloadRows(at: [indexPath!], with: .automatic)
-//            self?.tableView.reloadData()
+        let changedTweet = fetchedResultsController?.object(at: indexPath!)
+        container?.performBackgroundTask{context in
+            let tweet = try? TweetData.findOrCreate(matching: Tweet(changedTweet!), in: context)
+            print(tweet?.text ?? "tweet not found")
+            print("retweet changed")
+            tweet?.retweeted = retweet
+            tweet?.retweetCount = Int64(retweetCount)
+            try? context.save()
         }
+//        tweets[(indexPath?.row)!].retweeted = retweet
+//        tweets[(indexPath?.row)!].retweetCount = retweetCount
+//        DispatchQueue.main.async { [weak self] in
+//            self?.tableView?.reloadRows(at: [indexPath!], with: .automatic)
+////            self?.tableView.reloadData()
+//        }
     }
     
     private func performRequest() {
@@ -204,6 +223,13 @@ class TweetTableViewController: UITableViewController, TweetTableViewCellProtoco
         
     }
     
+    @objc private func createNewTweet() {
+        performSegue(withIdentifier: "newTweet", sender: self)
+//        let newTweetViewController = storyboard?.instantiateViewController(withIdentifier: "newTweetPopup") as! NewTweetViewController
+//        let navController = UINavigationController(rootViewController: newTweetViewController)
+//        present(navController, animated: true, completion: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         lastTwitterRequest = nil
@@ -213,25 +239,46 @@ class TweetTableViewController: UITableViewController, TweetTableViewCellProtoco
         tableView.dataSource = self
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
+        print(Reachability.isConnectedToNetwork())
+        let newTweetButton = UIButton.init(type: .custom)
+        newTweetButton.setImage(UIImage(named: "tweetButton"), for: .normal)
+        newTweetButton.addTarget(self, action: #selector(createNewTweet), for: UIControlEvents.touchUpInside)
+        newTweetButton.frame = CGRect(x: 0, y: 0, width: 28, height: 24)
+        let barButton = UIBarButtonItem(customView: newTweetButton)
+        self.navigationItem.rightBarButtonItem = barButton
+        cache = NSCache()
         NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
             [weak self]
             notification in
-//            print(notification.userInfo)
-            print(notification.userInfo?.description ?? "No description found")
-            if let insertedObjects = notification.userInfo?[NSInsertedObjectsKey] as? Set<NSManagedObject> {
-                print(insertedObjects)
-                if !insertedObjects.isEmpty && insertedObjects[insertedObjects.index(insertedObjects.startIndex, offsetBy: 0)] is TweetData {
-                    print("Type cast successful")
-                    self?.reloadTweetData()
-                }
-            }
+            print(notification.userInfo ?? "")
+            self?.container?.viewContext.mergeChanges(fromContextDidSave: notification)
             
+//            print(notification.userInfo?.description ?? "No description found")
+//            if let insertedObjects = notification.userInfo?[NSInsertedObjectsKey] as? Set<NSManagedObject> {
+//                print(insertedObjects)
+//                if !insertedObjects.isEmpty && insertedObjects[insertedObjects.index(insertedObjects.startIndex, offsetBy: 0)] is TweetData {
+//                    print("Type cast successful")
+//                    self?.reloadTweetData()
+//                }
+//            }
+        
         })
 //        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadTweetData(notification:)), name: .NSManagedObjectContextDidSave, object: nil)
         if userID == nil {
             self.navigationItem.title = "Home"
+            let request: NSFetchRequest<TweetData> = TweetData.fetchRequest()
+            let sortDescriptor = [NSSortDescriptor(key: "created", ascending: false)]
+            request.sortDescriptors = sortDescriptor
+            fetchedResultsController = NSFetchedResultsController<TweetData>(
+                fetchRequest: request,
+                managedObjectContext: (container?.viewContext)!,
+                sectionNameKeyPath: nil,
+                cacheName: nil
+            )
+            print("fetchedController set")
+            try? fetchedResultsController?.performFetch()
             performRequest()
-            reloadTweetData()
+//            reloadTweetData()
     //        self.tabBarController?.navigationItem.hidesBackButton = true
 //            hideBackButton()
 //            performRequest()
@@ -241,10 +288,25 @@ class TweetTableViewController: UITableViewController, TweetTableViewCellProtoco
 //            self.navigationItem.hidesBackButton = true
 //            let newBackButton = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.plain, target: self, action: #selector(TweetTableViewController.back(sender:)))
 //            self.navigationItem.leftBarButtonItem = newBackButton
+            let request: NSFetchRequest<TweetData> = TweetData.fetchRequest()
+            request.predicate = NSPredicate(format: "tweeter.identifier = %@", userID!)
+            let sortDescriptor = [NSSortDescriptor(key: "created", ascending: false)]
+            request.sortDescriptors = sortDescriptor
+            fetchedResultsController = NSFetchedResultsController<TweetData>(
+                fetchRequest: request,
+                managedObjectContext: (container?.viewContext)!,
+                sectionNameKeyPath: nil,
+                cacheName: nil
+            )
+            try? fetchedResultsController?.performFetch()
+            print("fetchedController set")
             performUserTimelineRequest()
-            reloadTweetData()
+//            reloadTweetData()
+            
 //            performUserTimelineRequest()
         }
+//        NSFetchedResultsControllerDelegate.fetchRes
+        fetchedResultsController?.delegate = self
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -275,17 +337,23 @@ class TweetTableViewController: UITableViewController, TweetTableViewCellProtoco
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        return fetchedResultsController?.sections?.count ?? 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return tweets.count
+//        print(fetchedResultsController?.sections?.count ?? "")
+        if let sections = fetchedResultsController?.sections, sections.count > 0 {
+            return sections[section].numberOfObjects
+        } else {
+            return 0
+        }
     }
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let tweet = tweets[indexPath.row]
+        let tweetData = fetchedResultsController?.object(at: indexPath)
+        let tweet = Tweet(tweetData!)
 //        print(tweet.identifier ?? "tweet not found")
 //        print(tweet.text ?? "text not found")
 //        print(tweet.tweeter?.name ?? "tweeter name not found")
@@ -293,7 +361,6 @@ class TweetTableViewController: UITableViewController, TweetTableViewCellProtoco
 //        let cell: UITableViewCell
         if tweet.media.isEmpty {
             let cell = tableView.dequeueReusableCell(withIdentifier: "tweetCell", for: indexPath) as! TweetTableViewCell
-            
             cell.tweet = tweet
             cell.tweetDataDelegate = self
             return cell
@@ -308,6 +375,12 @@ class TweetTableViewController: UITableViewController, TweetTableViewCellProtoco
             return cell
         }
     }
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        let backItem = UIBarButtonItem()
+//        backItem.title = "Back"
+//        navigationItem.backBarButtonItem = backItem
+//    }
 
     /*
     // Override to support conditional editing of the table view.

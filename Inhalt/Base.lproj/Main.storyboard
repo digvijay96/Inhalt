@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -142,8 +143,9 @@
                             <outlet property="delegate" destination="G6R-89-4u9" id="H4h-XM-Xf2"/>
                         </connections>
                     </tableView>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" id="n17-hl-Kck"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="zfg-Wi-u1M">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -151,10 +153,107 @@
                             <action selector="refreshControl:" destination="G6R-89-4u9" eventType="valueChanged" id="6BE-70-pv7"/>
                         </connections>
                     </refreshControl>
+                    <connections>
+                        <segue destination="R8P-uP-ZeG" kind="showDetail" identifier="newTweet" id="78R-NG-xC7"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hET-RS-HpR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4981.159420289855" y="475.27173913043481"/>
+        </scene>
+        <!--New Tweet View Controller-->
+        <scene sceneID="w25-g5-jkR">
+            <objects>
+                <viewController storyboardIdentifier="newTweetPopup" id="R8P-uP-ZeG" customClass="NewTweetViewController" customModule="Inhalt" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="fUf-hv-9Ry"/>
+                        <viewControllerLayoutGuide type="bottom" id="UMD-Af-te5"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="w3C-TW-arf">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ll-1i-hdm">
+                                <rect key="frame" x="20" y="28" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="CWY-2o-aR3"/>
+                                    <constraint firstAttribute="width" constant="40" id="ITR-eg-EB3"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="backButtonAction:" destination="R8P-uP-ZeG" eventType="touchUpInside" id="3FZ-aa-gcM"/>
+                                </connections>
+                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="OOQ-6q-xAu">
+                                <rect key="frame" x="20" y="78" width="374" height="245.33333333333331"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="What's happening?" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="bJE-Zk-qVd">
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="209.66666666666669"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="utE-25-yos">
+                                        <rect key="frame" x="0.0" y="219.66666666666669" width="374" height="25.666666666666629"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="rOe-HY-Gj3">
+                                                <rect key="frame" x="0.0" y="0.0" width="289" height="21.333333333333314"/>
+                                                <subviews>
+                                                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="DRl-zC-KYA">
+                                                        <rect key="frame" x="0.0" y="0.0" width="289" height="2"/>
+                                                    </progressView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vno-gL-gpI">
+                                                        <rect key="frame" x="0.0" y="7" width="289" height="14.333333333333314"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="DRl-zC-KYA" firstAttribute="width" secondItem="rOe-HY-Gj3" secondAttribute="width" id="Am1-69-T41"/>
+                                                    <constraint firstItem="vno-gL-gpI" firstAttribute="width" secondItem="rOe-HY-Gj3" secondAttribute="width" id="a9z-bc-hKd"/>
+                                                </constraints>
+                                            </stackView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2RJ-7K-TwC">
+                                                <rect key="frame" x="299" y="0.0" width="75" height="25.666666666666629"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="25" id="Cfz-me-HNm"/>
+                                                    <constraint firstAttribute="width" constant="75" id="LSf-J5-J1g"/>
+                                                </constraints>
+                                                <state key="normal" title="Button" image="Tweet"/>
+                                                <connections>
+                                                    <action selector="tweetButton:" destination="R8P-uP-ZeG" eventType="touchUpInside" id="nz4-Us-Zm7"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="utE-25-yos" firstAttribute="width" secondItem="OOQ-6q-xAu" secondAttribute="width" id="lZg-Nu-zFQ"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="OOQ-6q-xAu" firstAttribute="top" secondItem="8ll-1i-hdm" secondAttribute="bottom" constant="10.000000000000014" id="NLU-Ee-Bht"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="8ll-1i-hdm" secondAttribute="leading" id="SJH-HB-smZ"/>
+                            <constraint firstItem="8ll-1i-hdm" firstAttribute="top" secondItem="fUf-hv-9Ry" secondAttribute="bottom" constant="8" id="Zbo-Kx-n7K"/>
+                            <constraint firstItem="UMD-Af-te5" firstAttribute="top" secondItem="OOQ-6q-xAu" secondAttribute="bottom" constant="412.66666666666663" id="h2y-m6-Oxa"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="OOQ-6q-xAu" secondAttribute="leading" id="i6g-gu-GAu"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="OOQ-6q-xAu" secondAttribute="trailing" id="vjw-SC-Kh8"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="backButton" destination="8ll-1i-hdm" id="EvJ-5G-IkC"/>
+                        <outlet property="progressLabel" destination="vno-gL-gpI" id="9ou-CP-qBU"/>
+                        <outlet property="tweetButton" destination="2RJ-7K-TwC" id="BIx-W2-r0P"/>
+                        <outlet property="tweetProgressView" destination="DRl-zC-KYA" id="aGj-Ac-brA"/>
+                        <outlet property="tweetText" destination="bJE-Zk-qVd" id="Ema-C8-mTi"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yRS-ij-7m8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5876.811594202899" y="473.64130434782612"/>
         </scene>
         <!--Following-->
         <scene sceneID="cjh-Yg-PeQ">
@@ -233,10 +332,11 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Tweet" width="576" height="185"/>
         <image name="icons8-Contacts-50" width="25" height="25"/>
         <image name="icons8-Home-50" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Zbb-do-D7S"/>
+        <segue reference="xzd-wl-5Yr"/>
     </inferredMetricsTieBreakers>
 </document>

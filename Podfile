@@ -6,6 +6,7 @@ target 'Inhalt' do
   use_frameworks!
     pod 'TwitterKit'
     pod 'Alamofire', '~> 4.4'
+    pod 'SDWebImage', '~> 4.0'
   # Pods for Inhalt
 
   target 'InhaltTests' do

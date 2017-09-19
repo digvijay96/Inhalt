@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class TweetTableViewCell: UITableViewCell {
 
@@ -19,6 +20,7 @@ class TweetTableViewCell: UITableViewCell {
     @IBOutlet weak var retweetCountLabel: UILabel!
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var retweetButton: UIButton!
+    
     
     private var request: Request?
     var tweet: Tweet? {
@@ -51,16 +53,21 @@ class TweetTableViewCell: UITableViewCell {
             retweetButton.setImage(UIImage(named: "Retweet"), for: .normal)
         }
         let id = tweet?.identifier
-        DispatchQueue.global(qos: .userInitiated).async {
-            let profileImageUrl = self.tweet?.user.profileImageUrl
-            if let imageData = try? Data(contentsOf: profileImageUrl!) {
-                DispatchQueue.main.async {
-                    if id == self.tweet?.identifier {
-                        self.profileImageView?.image = UIImage(data: imageData)
-                    }
-                }
-            }
+        let profileImageUrl = tweet?.user.profileImageUrl
+        if id == tweet?.identifier {
+            profileImageView.sd_setImage(with: profileImageUrl, placeholderImage: nil)
         }
+        
+//        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+//            let profileImageUrl = self?.tweet?.user.profileImageUrl
+//            if let imageData = try? Data(contentsOf: profileImageUrl!) {
+//                DispatchQueue.main.async {
+//                    if id == self?.tweet?.identifier {
+//                        self?.profileImageView?.image = UIImage(data: imageData)
+//                    }
+//                }
+//            }
+//        }
         
         let created = tweet?.created
         let formatter = DateFormatter()

@@ -14,6 +14,7 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
     private var lastTwitterRequest: Request?
     private var refreshRequested: Bool = false
     private var request: Request?
+    var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     private var tweets = [Tweet]()
     private var trends = [String]()
 
@@ -102,6 +103,23 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
     
     private func showTrends(_ trends: [Any]) {
         self.trends = trends as! [String]
+        let context = container?.viewContext
+        let trendData = Trend.get(in: context!)
+        for trend in trendData {
+            context?.delete(trend)
+        }
+        do {
+            try context?.save()
+        } catch let error as NSError {
+            print("Could not save \(error)")
+        }
+        container?.performBackgroundTask{ [weak self] context in
+            for trend in (self?.trends)! {
+                Trend.create(named: trend, in: context)
+            }
+            try? context.save()
+        }
+        
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
         }
@@ -136,9 +154,22 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
         request?.twitterGetRequest(before: showTrends)
     }
     
+    private func showTrendsFromDb() {
+        let context = container?.viewContext
+        let trendData = Trend.get(in: context!)
+        for trend in trendData {
+            trends.append(trend.title!)
+        }
+        tableView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        performTrendsRequest()
+        if Reachability.isConnectedToNetwork() {
+            performTrendsRequest()
+        } else {
+            showTrendsFromDb()
+        }
         tableView.register(UINib(nibName: "TweetTableViewCell", bundle: nil), forCellReuseIdentifier: "tweetCell")
         tableView.register(UINib(nibName: "TweetWithMediaTableViewCell", bundle: nil), forCellReuseIdentifier: "tweetWithMediaCell")
         tweetSearchBar.delegate = self

@@ -10,13 +10,18 @@ import UIKit
 import CoreData
 
 class TweetData: NSManagedObject {
-    static func findOrCreateTweet(matching tweetInfo: Tweet, in context: NSManagedObjectContext) throws -> TweetData {
+    static func findOrCreate(matching tweetInfo: Tweet, in context: NSManagedObjectContext) throws -> TweetData {
         let request: NSFetchRequest<TweetData> = TweetData.fetchRequest()
         request.predicate = NSPredicate(format: "identifier = %@", tweetInfo.identifier)
         do {
             let match = try context.fetch(request)
             if match.count > 0 {
-                return match[0]
+                let tweet = match[0]
+                tweet.favorited = tweetInfo.favorited
+                tweet.favouriteCount = Int64(tweetInfo.favouriteCount)
+                tweet.retweeted = tweetInfo.retweeted
+                tweet.retweetCount = Int64(tweetInfo.retweetCount)
+                return tweet
             }
         }
         catch {
@@ -31,7 +36,7 @@ class TweetData: NSManagedObject {
         tweet.favouriteCount = Int64(tweetInfo.favouriteCount)
         tweet.retweeted = tweetInfo.retweeted
         tweet.retweetCount = Int64(tweetInfo.retweetCount)
-        tweet.tweeter = try? UserData.findOrCreateTwitterUser(matching: tweetInfo.user, in: context)
+        tweet.tweeter = try? UserData.findOrCreate(matching: tweetInfo.user, in: context)
         if !tweetInfo.media.isEmpty {
             tweet.mediaUrl = tweetInfo.media[0].url.absoluteString
         }

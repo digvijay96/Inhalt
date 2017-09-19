@@ -142,9 +142,13 @@ public class Request : NSObject {
             let request = client.urlRequest(withMethod: requestMethod, url: requestURL, parameters: parameters, error: &clientError)
             DispatchQueue.main.async {
                 client.sendTwitterRequest(request) { [weak self] (response, responseData, error) -> Void in
+//                    if let strongSelf = self {
+//                        
+//                    }
                     if let err = error {
                         print("Error: \(err.localizedDescription)")
                     } else {
+                        
                         let responseJsonData = try? JSONSerialization.jsonObject(with: responseData!, options: [])
 //                        print("network call")
                         //let backToString = String(data: responseData!, encoding: String.Encoding.utf8) as String!
@@ -157,7 +161,7 @@ public class Request : NSObject {
 //                        }
                         if Request.requestCompleted {
                             Request.requestCompleted = false
-                            handler((self?.parseData(responseJsonData))!)
+                                handler((self?.parseData(responseJsonData))!)
                         }
             //                      handler(responseJsonData)
                         //print(backToString ?? "Not converted")
@@ -192,7 +196,8 @@ public class Request : NSObject {
         "favorite" : "favorites/create",
         "remove_favorite" : "favorites/destroy",
         "retweet" : "statuses/retweet",
-        "undo_retweet" : "statuses/unretweet"
+        "undo_retweet" : "statuses/unretweet",
+        "new_status" : "statuses/update"
     ]
     
     struct HandlerFunction {

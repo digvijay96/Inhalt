@@ -22,6 +22,7 @@ class TweetWithMediaTableViewCell: UITableViewCell {
     @IBOutlet weak var retweetButton: UIButton!
     @IBOutlet weak var retweetCountLabel: UILabel!
     
+    
     private var request: Request?
     var tweet: Tweet? {
         didSet{
@@ -52,16 +53,22 @@ class TweetWithMediaTableViewCell: UITableViewCell {
             retweetButton.setImage(UIImage(named: "Retweet"), for: .normal)
         }
         let id = tweet?.identifier
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            let profileImageUrl = self?.tweet?.user.profileImageUrl
-            if let imageData = try? Data(contentsOf: profileImageUrl!) {
-                DispatchQueue.main.async {
-                    if id == self?.tweet?.identifier {
-                        self?.profileImageView?.image = UIImage(data: imageData)
-                    }
-                }
-            }
+        let profileImageUrl = tweet?.user.profileImageUrl
+        if id == tweet?.identifier {
+            profileImageView.sd_setImage(with: profileImageUrl, placeholderImage: nil)
         }
+//        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+//            let profileImageUrl = self?.tweet?.user.profileImageUrl
+//            if let imageData = try? Data(contentsOf: profileImageUrl!) {
+//                DispatchQueue.main.async {
+//                    if id == self?.tweet?.identifier {
+//                        let profileImage = UIImage(data: imageData)
+//                        self?.profileImageView?.image = profileImage
+////                            self?.cache?.setObject(profileImage!, forKey: self?.tweet?.user.profileImageUrl as AnyObject)
+//                    }
+//                }
+//            }
+//        }
         
         let created = tweet?.created
         let formatter = DateFormatter()
@@ -73,18 +80,23 @@ class TweetWithMediaTableViewCell: UITableViewCell {
         createdLabel?.text = formatter.string(from: created!)
         
         tweetImageView.image = nil
-        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-            let imageMediaUrl = self?.tweet?.media[0].url
-            if let imageData = try? Data(contentsOf: imageMediaUrl!) {
-                DispatchQueue.main.async {
-                    if id == self?.tweet?.identifier {
-                        self?.tweetImageView?.image = UIImage(data: imageData)
-                    }
-                }
-            }
+        let imageMediaUrl = tweet?.media[0].url
+        if id == tweet?.identifier {
+            tweetImageView.sd_setImage(with: imageMediaUrl, placeholderImage: nil)
         }
+//        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+//            let imageMediaUrl = self?.tweet?.media[0].url
+//            if let imageData = try? Data(contentsOf: imageMediaUrl!) {
+//                DispatchQueue.main.async {
+//                    if id == self?.tweet?.identifier {
+//                        let mediaImage = UIImage(data: imageData)
+//                        self?.tweetImageView?.image = mediaImage
+//                    }
+//                }
+//            }
+//        }
     }
-    
+
     
     @IBAction func likeButtonClicked(_ sender: UIButton) {
 //        if (tweet?.favorited)! {
