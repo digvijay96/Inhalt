@@ -32,10 +32,10 @@
             </objects>
             <point key="canvasLocation" x="1523.1884057971015" y="95.380434782608702"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Main Tab Bar View Controller-->
         <scene sceneID="8Ez-yr-37M">
             <objects>
-                <tabBarController storyboardIdentifier="HomeTabBarController" id="vjB-TT-vjp" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="HomeTabBarController" id="vjB-TT-vjp" customClass="MainTabBarViewController" customModule="Inhalt" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="B6y-sp-yFp"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="PWd-Vw-w7Y">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>

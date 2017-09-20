@@ -61,6 +61,23 @@ class FollowingTableViewController: UITableViewController {
         self.tabBarController?.title = "Following"
         tableView.estimatedRowHeight = 90
         tableView.rowHeight = UITableViewAutomaticDimension
+        let profileImageUrl = UserDefaults.standard.url(forKey: "userProfileImage")
+        if profileImageUrl != nil {
+            print("Inside profile image")
+            let userProfileImage = UIButton.init(type: .custom)
+            //        let imageData = try? Data(contentsOf: profileImageUrl)
+            //            userProfileImage.setImage(UIImage(data: imageData!), for: .normal)
+            userProfileImage.sd_setImage(with: profileImageUrl!, for: .normal, completed: nil)
+            //        userProfileImage.addTarget(self, action: nil, for: UIControlEvents.touchUpInside)
+            userProfileImage.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            userProfileImage.layer.borderWidth = 1
+            userProfileImage.layer.masksToBounds = false
+            userProfileImage.layer.borderColor = UIColor.black.cgColor
+            userProfileImage.layer.cornerRadius = userProfileImage.frame.height/2
+            userProfileImage.clipsToBounds = true
+            let leftBarButton = UIBarButtonItem(customView: userProfileImage)
+            self.navigationItem.leftBarButtonItem = leftBarButton
+        }
         NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {[weak self] notification in
             self?.reloadFollowingData()
             }
@@ -109,6 +126,7 @@ class FollowingTableViewController: UITableViewController {
         cell.profileImageView?.image = nil
         let profileImageUrl = followingUser.profileImageUrl
         cell.profileImageView.sd_setImage(with: profileImageUrl, placeholderImage: nil)
+        
         
 //        DispatchQueue.global(qos: .userInitiated).async {
 //            let profileImageUrl = followingUser.profileImageUrl

@@ -19,7 +19,6 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
     private var refreshRequested: Bool = false
     var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     var fetchedResultsController: NSFetchedResultsController<TweetData>?
-    var cache: NSCache<AnyObject, AnyObject>?
     
     private func saveTweets(_ tweets: [Any]) {
 //        if tweets.isEmpty == false {
@@ -246,7 +245,7 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
         newTweetButton.frame = CGRect(x: 0, y: 0, width: 28, height: 24)
         let barButton = UIBarButtonItem(customView: newTweetButton)
         self.navigationItem.rightBarButtonItem = barButton
-        cache = NSCache()
+        
         NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
             [weak self]
             notification in
@@ -263,9 +262,26 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
 //            }
         
         })
-//        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadTweetData(notification:)), name: .NSManagedObjectContextDidSave, object: nil)
         if userID == nil {
             self.navigationItem.title = "Home"
+            let profileImageUrl = UserDefaults.standard.url(forKey: "userProfileImage")
+            
+            if profileImageUrl != nil {
+                print("Inside profile image")
+                let userProfileImage = UIButton.init(type: .custom)
+                //        let imageData = try? Data(contentsOf: profileImageUrl)
+                //            userProfileImage.setImage(UIImage(data: imageData!), for: .normal)
+                userProfileImage.sd_setImage(with: profileImageUrl!, for: .normal, completed: nil)
+                //        userProfileImage.addTarget(self, action: nil, for: UIControlEvents.touchUpInside)
+                userProfileImage.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+                userProfileImage.layer.borderWidth = 1
+                userProfileImage.layer.masksToBounds = false
+                userProfileImage.layer.borderColor = UIColor.black.cgColor
+                userProfileImage.layer.cornerRadius = userProfileImage.frame.height/2
+                userProfileImage.clipsToBounds = true
+                let leftBarButton = UIBarButtonItem(customView: userProfileImage)
+                self.navigationItem.leftBarButtonItem = leftBarButton
+            }
             let request: NSFetchRequest<TweetData> = TweetData.fetchRequest()
             let sortDescriptor = [NSSortDescriptor(key: "created", ascending: false)]
             request.sortDescriptors = sortDescriptor

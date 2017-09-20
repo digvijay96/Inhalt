@@ -57,6 +57,7 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
         tweetText.layer.borderWidth = 1.0
         tweetText.layer.cornerRadius = 5.0
         progressLabel.text = "140 characters left"
+        tweetProgressView.progress = 0.0
 //        tweetButton.setImage(UIImage(named: "Retweet"), for: .normal)
 //        tweetText.becomeFirstResponder()
     }

@@ -91,6 +91,8 @@ public class Request : NSObject {
         switch requestType {
         case "following":
             parsedResults = parseUsers(results)
+        case "verify_credentials":
+            parsedResults = parseUsers(results)
         case "trends":
             parsedResults = parseTrends(results)
         default:
@@ -161,7 +163,7 @@ public class Request : NSObject {
 //                        }
                         if Request.requestCompleted {
                             Request.requestCompleted = false
-                                handler((self?.parseData(responseJsonData))!)
+                            handler((self?.parseData(responseJsonData))!)
                         }
             //                      handler(responseJsonData)
                         //print(backToString ?? "Not converted")
@@ -197,7 +199,9 @@ public class Request : NSObject {
         "remove_favorite" : "favorites/destroy",
         "retweet" : "statuses/retweet",
         "undo_retweet" : "statuses/unretweet",
-        "new_status" : "statuses/update"
+        "new_status" : "statuses/update",
+        "user_details": "users/show",
+        "verify_credentials": "account/verify_credentials"
     ]
     
     struct HandlerFunction {

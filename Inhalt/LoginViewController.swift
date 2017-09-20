@@ -13,7 +13,6 @@ class LoginViewController: UIViewController {
 
     //let session
     private var UserLoggedIn = false
-    private var userID: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,11 +40,11 @@ class LoginViewController: UIViewController {
     private func addLoginButton() {
         let logInButton = TWTRLogInButton(logInCompletion: { [weak self] session, error in
             if (session != nil) {
-                print("signed in as \(session?.userName ?? "")");
-                self?.userID = session?.userID
+                print("signed in as \(session?.userName ?? "")")
+                UserDefaults.standard.set(session?.userID, forKey: "userID")
                 self?.LoginSuccess()
             } else {
-                print("error: \(error?.localizedDescription ?? "")");
+                print("error: \(error?.localizedDescription ?? "")")
             }
         })
         logInButton.center = self.view.center

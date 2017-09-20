@@ -17,11 +17,16 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
     var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     private var tweets = [Tweet]()
     private var trends = [String]()
-
+    var activityIndicatorView: UIActivityIndicatorView!
     
     private var searchTerm: String? {
         didSet{
             tweetSearchBar?.resignFirstResponder()
+            trends = []
+            tweets = []
+            tableView.reloadData()
+            tableView.separatorStyle = UITableViewCellSeparatorStyle.none
+            activityIndicatorView.startAnimating()
             lastTwitterRequest = nil
             performSearchRequest()
         }
@@ -94,6 +99,8 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
     
     private func showTweets(_ tweets: [Any]) {
         self.tweets = tweets as! [Tweet]
+        tableView.separatorStyle = UITableViewCellSeparatorStyle.singleLine
+        activityIndicatorView.stopAnimating()
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
         }
@@ -176,6 +183,24 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
         self.tabBarController?.title = "Search"
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
+        activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        activityIndicatorView.center = tableView.center
+        tableView.addSubview(activityIndicatorView)
+//        tableView.backgroundView = activityIndicatorView
+        let profileImageUrl = UserDefaults.standard.url(forKey: "userProfileImage")
+        if profileImageUrl != nil {
+            print("Inside profile image")
+            let userProfileImage = UIButton.init(type: .custom)
+            userProfileImage.sd_setImage(with: profileImageUrl!, for: .normal, completed: nil)
+            userProfileImage.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            userProfileImage.layer.borderWidth = 1
+            userProfileImage.layer.masksToBounds = false
+            userProfileImage.layer.borderColor = UIColor.black.cgColor
+            userProfileImage.layer.cornerRadius = userProfileImage.frame.height/2
+            userProfileImage.clipsToBounds = true
+            let leftBarButton = UIBarButtonItem(customView: userProfileImage)
+            self.navigationItem.leftBarButtonItem = leftBarButton
+        }
         //searchTerm = "#hello"
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
