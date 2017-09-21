@@ -46,6 +46,7 @@
                         <segue destination="v7I-2N-fWi" kind="relationship" relationship="viewControllers" id="Qrz-Uc-Oog"/>
                         <segue destination="SQk-4G-Bub" kind="relationship" relationship="viewControllers" id="upA-zx-qC8"/>
                         <segue destination="V8O-qp-2mh" kind="relationship" relationship="viewControllers" id="xUM-b7-aph"/>
+                        <segue destination="Qen-Em-VHt" kind="relationship" relationship="viewControllers" id="615-g5-WkM"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lGl-Ux-yF8" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -128,12 +129,12 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aV3-IM-t2Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4807.2463768115949" y="-305.70652173913044"/>
+            <point key="canvasLocation" x="5172" y="-306"/>
         </scene>
         <!--Tweet Table View Controller-->
         <scene sceneID="o4s-5l-GKK">
             <objects>
-                <tableViewController id="G6R-89-4u9" customClass="TweetTableViewController" customModule="Inhalt" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="tweetTableViewController" id="G6R-89-4u9" customClass="TweetTableViewController" customModule="Inhalt" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="114" sectionHeaderHeight="28" sectionFooterHeight="28" id="ze6-6D-q4i">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -185,7 +186,7 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="OOQ-6q-xAu">
-                                <rect key="frame" x="20" y="78" width="374" height="245.33333333333331"/>
+                                <rect key="frame" x="20" y="78" width="374" height="250"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="What's happening?" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="bJE-Zk-qVd">
                                         <rect key="frame" x="0.0" y="0.0" width="374" height="209.66666666666669"/>
@@ -194,7 +195,7 @@
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="utE-25-yos">
-                                        <rect key="frame" x="0.0" y="219.66666666666669" width="374" height="25.666666666666629"/>
+                                        <rect key="frame" x="0.0" y="219.66666666666669" width="374" height="30.333333333333314"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="rOe-HY-Gj3">
                                                 <rect key="frame" x="0.0" y="0.0" width="289" height="21.333333333333314"/>
@@ -229,6 +230,7 @@
                                     </stackView>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstAttribute="height" constant="250" id="NUl-ur-y52"/>
                                     <constraint firstItem="utE-25-yos" firstAttribute="width" secondItem="OOQ-6q-xAu" secondAttribute="width" id="lZg-Nu-zFQ"/>
                                 </constraints>
                             </stackView>
@@ -238,7 +240,6 @@
                             <constraint firstItem="OOQ-6q-xAu" firstAttribute="top" secondItem="8ll-1i-hdm" secondAttribute="bottom" constant="10.000000000000014" id="NLU-Ee-Bht"/>
                             <constraint firstAttribute="leadingMargin" secondItem="8ll-1i-hdm" secondAttribute="leading" id="SJH-HB-smZ"/>
                             <constraint firstItem="8ll-1i-hdm" firstAttribute="top" secondItem="fUf-hv-9Ry" secondAttribute="bottom" constant="8" id="Zbo-Kx-n7K"/>
-                            <constraint firstItem="UMD-Af-te5" firstAttribute="top" secondItem="OOQ-6q-xAu" secondAttribute="bottom" constant="412.66666666666663" id="h2y-m6-Oxa"/>
                             <constraint firstAttribute="leadingMargin" secondItem="OOQ-6q-xAu" secondAttribute="leading" id="i6g-gu-GAu"/>
                             <constraint firstAttribute="trailingMargin" secondItem="OOQ-6q-xAu" secondAttribute="trailing" id="vjw-SC-Kh8"/>
                         </constraints>
@@ -259,7 +260,7 @@
         <scene sceneID="cjh-Yg-PeQ">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="V8O-qp-2mh" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Following" image="icons8-Contacts-50" id="Qqx-Wj-9cm"/>
+                    <tabBarItem key="tabBarItem" title="Following" image="Following" id="Qqx-Wj-9cm"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="7ck-xy-QDQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -292,6 +293,59 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OcM-uu-Qz7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3971.0144927536235" y="474.45652173913049"/>
+        </scene>
+        <!--Profile View Controller-->
+        <scene sceneID="U6p-Jd-3Jz">
+            <objects>
+                <viewController id="iEu-ML-y8K" customClass="ProfileViewController" customModule="Inhalt" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="nQj-Rl-bdJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="tS1-Lv-fXk"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="tPc-Xp-HUy">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eze-EQ-Mfq">
+                                <rect key="frame" x="20" y="84" width="80" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="Sgk-j0-EMe"/>
+                                    <constraint firstAttribute="width" constant="80" id="lzM-Op-YYG"/>
+                                </constraints>
+                            </imageView>
+                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9hs-uP-WYB">
+                                <rect key="frame" x="0.0" y="64" width="414" height="60"/>
+                                <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="djS-bK-ain"/>
+                                </constraints>
+                            </view>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cyE-ya-djv">
+                                <rect key="frame" x="0.0" y="174" width="414" height="513"/>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="leadingMargin" secondItem="eze-EQ-Mfq" secondAttribute="leading" id="6cj-QF-kYo"/>
+                            <constraint firstItem="9hs-uP-WYB" firstAttribute="top" secondItem="nQj-Rl-bdJ" secondAttribute="bottom" id="CNz-kh-NFE"/>
+                            <constraint firstItem="eze-EQ-Mfq" firstAttribute="top" secondItem="9hs-uP-WYB" secondAttribute="bottom" constant="-40" id="JxQ-5G-OCY"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="cyE-ya-djv" secondAttribute="trailing" constant="-20" id="LbF-NA-U85"/>
+                            <constraint firstItem="9hs-uP-WYB" firstAttribute="leading" secondItem="tPc-Xp-HUy" secondAttribute="leadingMargin" constant="-20" id="ben-kV-zWq"/>
+                            <constraint firstItem="cyE-ya-djv" firstAttribute="top" secondItem="eze-EQ-Mfq" secondAttribute="bottom" constant="10" id="dgR-0r-gXJ"/>
+                            <constraint firstItem="tS1-Lv-fXk" firstAttribute="top" secondItem="cyE-ya-djv" secondAttribute="bottom" id="i0A-XA-xFX"/>
+                            <constraint firstItem="cyE-ya-djv" firstAttribute="leading" secondItem="tPc-Xp-HUy" secondAttribute="leadingMargin" constant="-20" id="ru1-0q-Ccj"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="9hs-uP-WYB" secondAttribute="trailing" constant="-20" id="snC-li-Ofy"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="hJr-LS-X7c"/>
+                    <connections>
+                        <outlet property="profileImageView" destination="eze-EQ-Mfq" id="Z7p-Y3-5rk"/>
+                        <outlet property="tweetsContainerView" destination="cyE-ya-djv" id="9bI-sK-TW1"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wGS-N8-l7y" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4494.202898550725" y="-1018.2065217391305"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="WI9-8g-iKz">
@@ -330,10 +384,30 @@
             </objects>
             <point key="canvasLocation" x="615.94202898550725" y="95.380434782608702"/>
         </scene>
+        <!--Profile-->
+        <scene sceneID="ylh-Ih-CFF">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Qen-Em-VHt" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Profile" image="Profile" id="O1m-qt-y4I"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="fsa-jC-SHo">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="iEu-ML-y8K" kind="relationship" relationship="rootViewController" id="C2P-0Y-S2v"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YzV-E4-Okb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3586.9565217391305" y="-1018.2065217391305"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="Following" width="25" height="25"/>
+        <image name="Profile" width="25" height="25"/>
         <image name="Tweet" width="576" height="185"/>
-        <image name="icons8-Contacts-50" width="25" height="25"/>
         <image name="icons8-Home-50" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>

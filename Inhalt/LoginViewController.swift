@@ -10,9 +10,6 @@ import UIKit
 import TwitterKit
 
 class LoginViewController: UIViewController {
-
-    //let session
-    private var UserLoggedIn = false
     
     override func viewDidLoad() {
         super.viewDidLoad()

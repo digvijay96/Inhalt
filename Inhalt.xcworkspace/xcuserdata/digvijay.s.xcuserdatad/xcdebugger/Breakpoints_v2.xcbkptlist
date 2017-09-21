@@ -296,7 +296,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Inhalt/TweetTableViewController.swift"
-            timestampString = "527602499.311767"
+            timestampString = "527612958.832315"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "118"
@@ -392,7 +392,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Inhalt/TweetTableViewController.swift"
-            timestampString = "527602499.311767"
+            timestampString = "527612958.832315"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "186"
@@ -520,7 +520,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Inhalt/TweetTableViewController.swift"
-            timestampString = "527602499.311767"
+            timestampString = "527612958.832315"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "227"
@@ -557,6 +557,102 @@
                   startingLineNumber = "227"
                   endingLineNumber = "227"
                   offsetFromSymbolStart = "751">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Inhalt/TweetTableViewController.swift"
+            timestampString = "527612936.979002"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "saveTweets(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Inhalt.TweetTableViewController.(saveTweets in _DCD4AB52645398FBAF166352847E0D20) (Swift.Array&lt;Any&gt;) -&gt; ()"
+                  moduleName = "Inhalt"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/digvijay.s/Inhalt/Inhalt/TweetTableViewController.swift"
+                  timestampString = "527613180.428276"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "30"
+                  endingLineNumber = "30"
+                  offsetFromSymbolStart = "101">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Inhalt.TweetTableViewController.((saveTweets in _DCD4AB52645398FBAF166352847E0D20) (Swift.Array&lt;Any&gt;) -&gt; ()).(closure #1)"
+                  moduleName = "Inhalt"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/digvijay.s/Inhalt/Inhalt/TweetTableViewController.swift"
+                  timestampString = "527613180.431846"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "30"
+                  endingLineNumber = "30"
+                  offsetFromSymbolStart = "35">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Inhalt/TweetTableViewController.swift"
+            timestampString = "527613073.406738"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
+            landmarkName = "saveTweets(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Inhalt.TweetTableViewController.((saveTweets in _DCD4AB52645398FBAF166352847E0D20) (Swift.Array&lt;Any&gt;) -&gt; ()).(closure #1)"
+                  moduleName = "Inhalt"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/digvijay.s/Inhalt/Inhalt/TweetTableViewController.swift"
+                  timestampString = "527613180.495349"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "38"
+                  endingLineNumber = "38"
+                  offsetFromSymbolStart = "46">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Inhalt.TweetTableViewController.((saveTweets in _DCD4AB52645398FBAF166352847E0D20) (Swift.Array&lt;Any&gt;) -&gt; ()).(closure #1)"
+                  moduleName = "Inhalt"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/digvijay.s/Inhalt/Inhalt/TweetTableViewController.swift"
+                  timestampString = "527613180.500382"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "38"
+                  endingLineNumber = "38"
+                  offsetFromSymbolStart = "2103">
                </Location>
             </Locations>
          </BreakpointContent>

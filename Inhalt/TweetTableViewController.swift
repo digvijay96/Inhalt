@@ -27,7 +27,7 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
         self.tweets = tweets as! [Tweet]
 //        var oldTweets = try? TweetData.getAllTweets(in: (container?.viewContext)!)
         
-        container?.performBackgroundTask{ [weak self] context in
+        container?.performBackgroundTask{ context in
 //            let oldTweets = try? TweetData.getAllTweets(in: context)
 //            for tweet in oldTweets! {
 ////                print(tweet)
@@ -35,14 +35,14 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
 //                    context.delete(tweet)
 //                }
 //            }
-            for tweetInfo in (self?.tweets)! {
-                _ = try? TweetData.findOrCreate(matching: tweetInfo, in: context)
-//                print(tweet)
-//                print("This is tweety")
-//                print(tweety ?? "tweety not found")
-            }
-            try? context.save()
-            self?.printDatabaseStatistics()
+                for tweetInfo in (self.tweets) {
+                    _ = try? TweetData.findOrCreate(matching: tweetInfo, in: context)
+    //                print(tweet)
+    //                print("This is tweety")
+    //                print(tweety ?? "tweety not found")
+                }
+                try? context.save()
+                self.printDatabaseStatistics()
         }
 //        print(self.tweets)
     }
@@ -238,7 +238,6 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
         tableView.dataSource = self
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
-        print(Reachability.isConnectedToNetwork())
         let newTweetButton = UIButton.init(type: .custom)
         newTweetButton.setImage(UIImage(named: "tweetButton"), for: .normal)
         newTweetButton.addTarget(self, action: #selector(createNewTweet), for: UIControlEvents.touchUpInside)

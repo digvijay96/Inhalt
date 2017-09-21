@@ -18,6 +18,7 @@ class MainTabBarViewController: UITabBarController {
         let profileImageUrl = loggedInUser.profileImageUrl
 //        let imageData = try? Data(contentsOf: profileImageUrl)
         UserDefaults.standard.set(profileImageUrl, forKey: "userProfileImage")
+        UserDefaults.standard.set(loggedInUser.id, forKey: "userID")
 //        let userProfileImage = UIButton.init(type: .custom)
 //        let imageData = try? Data(contentsOf: profileImageUrl)
 //        userProfileImage.setImage(UIImage(data: imageData!), for: .normal)
