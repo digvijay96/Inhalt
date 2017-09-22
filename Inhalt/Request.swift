@@ -154,7 +154,7 @@ public class Request : NSObject {
                         let responseJsonData = try? JSONSerialization.jsonObject(with: responseData!, options: [])
 //                        print("network call")
                         //let backToString = String(data: responseData!, encoding: String.Encoding.utf8) as String!
-                        print(responseJsonData ?? "Not set")
+//                        print(responseJsonData ?? "Not set")
 //                        if self?.requestType == "following" {
 //                            handler((self?.parseUsers(responseJsonData))!)
 //                        }
@@ -163,7 +163,9 @@ public class Request : NSObject {
 //                        }
                         if Request.requestCompleted {
                             Request.requestCompleted = false
-                            handler((self?.parseData(responseJsonData))!)
+                            if let strongSelf = self {
+                                handler((strongSelf.parseData(responseJsonData)))
+                            }
                         }
             //                      handler(responseJsonData)
                         //print(backToString ?? "Not converted")

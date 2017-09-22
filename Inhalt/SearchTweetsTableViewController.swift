@@ -32,37 +32,6 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
         }
     }
     
-    func didPressLikeOrRetweetButton(_ changedTweet: [Any]) -> Void {
-//        let changedTweet = changedTweet[0] as? Tweet
-//        print("changing tweet")
-//        var index: Int?
-//        for indexValue in 0..<tweets.count {
-//            if tweets[indexValue].identifier == changedTweet?.identifier {
-//                tweets[indexValue] = changedTweet!
-//                index = indexValue
-//                break
-//            }
-//        }
-////        let indexPath = IndexPath(item: index!, section: 0)
-//        DispatchQueue.main.async { [weak self] in
-//            self?.tableView.reloadData()
-//        }
-    }
-    
-//    @IBOutlet weak var searchTextField: UITextField! {
-//        didSet{
-//            searchTextField.delegate = self
-//        }
-//    }
-//    
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        if textField == searchTextField {
-//            print(searchTextField.text ?? "search field empty")
-//            searchTerm = searchTextField.text
-//        }
-//        return true
-//    }
-    
     func editCellDataAfterFavorite(_ cell: Any, changeLikeCountTo favoriteCount: Int, changeFavouritedTo favorite: Bool) {
         let tweetTableViewCell: UITableViewCell
         if type(of: cell) == TweetTableViewCell.self {
@@ -170,23 +139,7 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
         tableView.reloadData()
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        if Reachability.isConnectedToNetwork() {
-            performTrendsRequest()
-        } else {
-            showTrendsFromDb()
-        }
-        tableView.register(UINib(nibName: "TweetTableViewCell", bundle: nil), forCellReuseIdentifier: "tweetCell")
-        tableView.register(UINib(nibName: "TweetWithMediaTableViewCell", bundle: nil), forCellReuseIdentifier: "tweetWithMediaCell")
-        tweetSearchBar.delegate = self
-        self.tabBarController?.title = "Search"
-        tableView.estimatedRowHeight = tableView.rowHeight
-        tableView.rowHeight = UITableViewAutomaticDimension
-        activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
-        activityIndicatorView.center = tableView.center
-        tableView.addSubview(activityIndicatorView)
-//        tableView.backgroundView = activityIndicatorView
+    private func showProfileImage() {
         let profileImageUrl = UserDefaults.standard.url(forKey: "userProfileImage")
         if profileImageUrl != nil {
             print("Inside profile image")
@@ -201,17 +154,31 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
             let leftBarButton = UIBarButtonItem(customView: userProfileImage)
             self.navigationItem.leftBarButtonItem = leftBarButton
         }
-        //searchTerm = "#hello"
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.title = "Search"
+        if Reachability.isConnectedToNetwork() {
+            performTrendsRequest()
+        } else {
+            showTrendsFromDb()
+        }
+        tableView.register(UINib(nibName: "TweetTableViewCell", bundle: nil), forCellReuseIdentifier: "tweetCell")
+        tableView.register(UINib(nibName: "TweetWithMediaTableViewCell", bundle: nil), forCellReuseIdentifier: "tweetWithMediaCell")
+        tweetSearchBar.delegate = self
+        self.tabBarController?.title = "Search"
+        tableView.estimatedRowHeight = tableView.rowHeight
+        tableView.rowHeight = UITableViewAutomaticDimension
+        activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        activityIndicatorView.center = tableView.center
+        tableView.addSubview(activityIndicatorView)
+        showProfileImage()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationItem.title = "Search"
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -268,51 +235,5 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
             searchTerm = trends[indexPath.row]
         }
     }
- 
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    
-    // MARK: - Navigation
-    /*
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

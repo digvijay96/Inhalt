@@ -46,33 +46,6 @@ class TweetData: NSManagedObject {
         return tweet
     }
     
-    static func getAllTweets(in context: NSManagedObjectContext) throws -> [TweetData] {
-        let request: NSFetchRequest<TweetData> = TweetData.fetchRequest()
-        let sortDescriptor = [NSSortDescriptor(key: "created", ascending: false)]
-        request.sortDescriptors = sortDescriptor
-        do {
-            let tweetData = try context.fetch(request)
-            return tweetData
-        }
-        catch {
-            throw error
-        }
-    }
-    
-    static func getTweetsFromAUser(matching userId: String, in context: NSManagedObjectContext) throws -> [TweetData] {
-        let request: NSFetchRequest<TweetData> = TweetData.fetchRequest()
-        let sortDescriptor = [NSSortDescriptor(key: "created", ascending: false)]
-        request.predicate = NSPredicate(format: "tweeter.identifier = %@", userId)
-        request.sortDescriptors = sortDescriptor
-        do {
-            let matches = try context.fetch(request)
-            return matches
-        }
-        catch {
-            throw error
-        }
-    }
-    
 //    static func deleteOldTweets(in context: NSManagedObjectContext) throws {
 //        let request: NSFetchRequest<TweetData> = TweetData.fetchRequest()
 //        let sortDescriptor = [NSSortDescriptor(key: "created", ascending: false)]

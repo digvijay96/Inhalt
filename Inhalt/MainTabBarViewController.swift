@@ -18,14 +18,11 @@ class MainTabBarViewController: UITabBarController {
         let profileImageUrl = loggedInUser.profileImageUrl
 //        let imageData = try? Data(contentsOf: profileImageUrl)
         UserDefaults.standard.set(profileImageUrl, forKey: "userProfileImage")
+        UserDefaults.standard.set(loggedInUser.followersCount, forKey: "userFollowersCount")
+        UserDefaults.standard.set(loggedInUser.friendsCount, forKey: "userFriendsCount")
         UserDefaults.standard.set(loggedInUser.id, forKey: "userID")
-//        let userProfileImage = UIButton.init(type: .custom)
-//        let imageData = try? Data(contentsOf: profileImageUrl)
-//        userProfileImage.setImage(UIImage(data: imageData!), for: .normal)
-////        userProfileImage.addTarget(self, action: nil, for: UIControlEvents.touchUpInside)
-//        userProfileImage.frame = CGRect(x: 0, y: 0, width: 28, height: 24)
-//        let barButton = UIBarButtonItem(customView: userProfileImage)
-//        self.navigationItem.leftBarButtonItem = barButton
+        UserDefaults.standard.set(loggedInUser.name, forKey: "userName")
+//        UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: loggedInUser), forKey: "userDetails")
     }
     
     private func loggedInUserDetails() {
@@ -47,16 +44,5 @@ class MainTabBarViewController: UITabBarController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

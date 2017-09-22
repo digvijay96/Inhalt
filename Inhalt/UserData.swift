@@ -30,7 +30,9 @@ class UserData: NSManagedObject {
         twitterUser.identifier = userInfo.id
         twitterUser.profileImageUrl = userInfo.profileImageUrl.absoluteString
         twitterUser.descriptionData = userInfo.description
-        twitterUser.following = true
+        twitterUser.following = userInfo.following
+        twitterUser.followersCount = Int64(userInfo.followersCount)
+        twitterUser.friendsCount = Int64(userInfo.friendsCount)
         return twitterUser
     }
     

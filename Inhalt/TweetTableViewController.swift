@@ -47,6 +47,15 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
 //        print(self.tweets)
     }
     
+    private func timelineIsForUser() -> Bool {
+        if userID == nil {
+            return false
+        }
+        else {
+            return true
+        }
+    }
+    
     private func printDatabaseStatistics() {
         if let context = container?.viewContext {
             context.perform{
@@ -62,36 +71,14 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
     }
 
     
-//    private func saveTweets(_ tweets: [Any]) {
-//        
-//    }
-    
     @IBAction func refreshControl(_ sender: UIRefreshControl) {
         refreshRequested = true
-        if userID == nil {
-            performRequest()
-        }
-        else {
+        if timelineIsForUser() {
             performUserTimelineRequest()
         }
-    }
-    
-    func didPressLikeOrRetweetButton(_ changedTweet: [Any]) -> Void {
-//        let changedTweet = changedTweet[0] as? Tweet
-//        var index: Int?
-//        print("changing tweet")
-//        for indexValue in 0..<tweets.count {
-//            if tweets[indexValue].identifier == changedTweet?.identifier {
-//                tweets[indexValue] = changedTweet!
-//                index = indexValue
-//                break
-//            }
-//        }
-////        let indexPath = IndexPath(item: index!, section: 0)
-//        DispatchQueue.main.async { [weak self] in
-////                self?.tableView?.reloadRows(at: [indexPath], with: .top)
-//            self?.tableView.reloadData()
-//        }
+        else {
+            performRequest()
+        }
     }
     
     func editCellDataAfterFavorite(_ cell: Any, changeLikeCountTo favoriteCount: Int, changeFavouritedTo favorite: Bool) {
@@ -107,8 +94,8 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
         let changedTweet = fetchedResultsController?.object(at: indexPath!)
         container?.performBackgroundTask{context in
             let tweet = try? TweetData.findOrCreate(matching: Tweet(changedTweet!), in: context)
-            print(tweet?.text ?? "tweet not found")
-            print("favorite changed")
+//            print(tweet?.text ?? "tweet not found")
+//            print("favorite changed")
             tweet?.favorited = favorite
             tweet?.favouriteCount = Int64(favoriteCount)
 //            print(tweet?.favouriteCount)
@@ -136,8 +123,6 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
         let changedTweet = fetchedResultsController?.object(at: indexPath!)
         container?.performBackgroundTask{context in
             let tweet = try? TweetData.findOrCreate(matching: Tweet(changedTweet!), in: context)
-            print(tweet?.text ?? "tweet not found")
-            print("retweet changed")
             tweet?.retweeted = retweet
             tweet?.retweetCount = Int64(retweetCount)
             try? context.save()
@@ -170,63 +155,69 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
         }
     }
     
-//    private func getTweetDataFromDb() {
-//        container?.performBackgroundTask{ [weak self] context in
-//            self?.tweetData = try! TweetData.getAllTweets(in: context)
-//            if (self?.tweetData.count)! > 0 {
-//                print(self?.tweetData[0].created ?? "")
-//                print(self?.tweetData)
-//                print("Added items to db")
-//            }
-//            else {
-//                print("DB not persisting")
-//            }
-//            print(NSDate())
-//            DispatchQueue.main.async {
-//                self?.tableView.reloadData()
-//            }
-//            
-//        }
-//        print(self.tweetData[0].created - NSDate())
-//        
-//    }
-    
-    @objc private func reloadTweetData() {
-        if userID == nil {
-            self.tweetData = try! TweetData.getAllTweets(in: (container?.viewContext)!)
-        }
-        else {
-            self.tweetData = try! TweetData.getTweetsFromAUser(matching: userID!, in: (container?.viewContext)!)
-        }
-        if (self.tweetData.count) > 0 {
-//            print(self.tweetData)
-            self.tweets = []
-            for tweet in self.tweetData {
-                self.tweets.append(Tweet(tweet))
-            }
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
-        else  {
-            print("DB not persisting")
-            if userID == nil {
-                performRequest()
-            }
-            else {
-                performUserTimelineRequest()
-            }
-        }
-        print(NSDate())
-//        self.tweets = DataToObjectConverter.convertTweetDataToTweet(self.tweetData)
-        
-    }
-    
     @objc private func createNewTweet() {
         performSegue(withIdentifier: "newTweet", sender: self)
 //        let newTweetViewController = storyboard?.instantiateViewController(withIdentifier: "newTweetPopup") as! NewTweetViewController
 //        let navController = UINavigationController(rootViewController: newTweetViewController)
 //        present(navController, animated: true, completion: nil)
+    }
+    
+    private func showProfileImage() {
+        let profileImageUrl = UserDefaults.standard.url(forKey: "userProfileImage")
+        if profileImageUrl != nil {
+            print("Inside profile image")
+            let userProfileImage = UIButton.init(type: .custom)
+            //        let imageData = try? Data(contentsOf: profileImageUrl)
+            //            userProfileImage.setImage(UIImage(data: imageData!), for: .normal)
+            userProfileImage.sd_setImage(with: profileImageUrl!, for: .normal, completed: nil)
+            //        userProfileImage.addTarget(self, action: nil, for: UIControlEvents.touchUpInside)
+            userProfileImage.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            userProfileImage.layer.borderWidth = 1
+            userProfileImage.layer.masksToBounds = false
+            userProfileImage.layer.borderColor = UIColor.black.cgColor
+            userProfileImage.layer.cornerRadius = userProfileImage.frame.height/2
+            userProfileImage.clipsToBounds = true
+            let leftBarButton = UIBarButtonItem(customView: userProfileImage)
+            self.navigationItem.leftBarButtonItem = leftBarButton
+        }
+
+    }
+    
+    private func showTimeline() {
+        if timelineIsForUser() {
+            self.navigationItem.hidesBackButton = true
+            self.title = "Tweets"
+            let request: NSFetchRequest<TweetData> = TweetData.fetchRequest()
+            request.predicate = NSPredicate(format: "tweeter.identifier = %@", userID!)
+            let sortDescriptor = [NSSortDescriptor(key: "created", ascending: false)]
+            request.sortDescriptors = sortDescriptor
+            fetchedResultsController = NSFetchedResultsController<TweetData>(
+                fetchRequest: request,
+                managedObjectContext: (container?.viewContext)!,
+                sectionNameKeyPath: nil,
+                cacheName: nil
+            )
+            try? fetchedResultsController?.performFetch()
+            print("fetchedController set")
+            performUserTimelineRequest()
+        }
+        else {
+            self.title = "Home"
+            showProfileImage()
+            let request: NSFetchRequest<TweetData> = TweetData.fetchRequest()
+            let sortDescriptor = [NSSortDescriptor(key: "created", ascending: false)]
+            request.sortDescriptors = sortDescriptor
+            fetchedResultsController = NSFetchedResultsController<TweetData>(
+                fetchRequest: request,
+                managedObjectContext: (container?.viewContext)!,
+                sectionNameKeyPath: nil,
+                cacheName: nil
+            )
+            print("fetchedController set")
+            try? fetchedResultsController?.performFetch()
+            performRequest()
+        }
+
     }
     
     override func viewDidLoad() {
@@ -261,91 +252,12 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
 //            }
         
         })
-        if userID == nil {
-            self.navigationItem.title = "Home"
-            let profileImageUrl = UserDefaults.standard.url(forKey: "userProfileImage")
-            
-            if profileImageUrl != nil {
-                print("Inside profile image")
-                let userProfileImage = UIButton.init(type: .custom)
-                //        let imageData = try? Data(contentsOf: profileImageUrl)
-                //            userProfileImage.setImage(UIImage(data: imageData!), for: .normal)
-                userProfileImage.sd_setImage(with: profileImageUrl!, for: .normal, completed: nil)
-                //        userProfileImage.addTarget(self, action: nil, for: UIControlEvents.touchUpInside)
-                userProfileImage.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-                userProfileImage.layer.borderWidth = 1
-                userProfileImage.layer.masksToBounds = false
-                userProfileImage.layer.borderColor = UIColor.black.cgColor
-                userProfileImage.layer.cornerRadius = userProfileImage.frame.height/2
-                userProfileImage.clipsToBounds = true
-                let leftBarButton = UIBarButtonItem(customView: userProfileImage)
-                self.navigationItem.leftBarButtonItem = leftBarButton
-            }
-            let request: NSFetchRequest<TweetData> = TweetData.fetchRequest()
-            let sortDescriptor = [NSSortDescriptor(key: "created", ascending: false)]
-            request.sortDescriptors = sortDescriptor
-            fetchedResultsController = NSFetchedResultsController<TweetData>(
-                fetchRequest: request,
-                managedObjectContext: (container?.viewContext)!,
-                sectionNameKeyPath: nil,
-                cacheName: nil
-            )
-            print("fetchedController set")
-            try? fetchedResultsController?.performFetch()
-            performRequest()
-//            reloadTweetData()
-    //        self.tabBarController?.navigationItem.hidesBackButton = true
-//            hideBackButton()
-//            performRequest()
-//            getTweetDataFromDb()
-        }
-        else {
-//            self.navigationItem.hidesBackButton = true
-//            let newBackButton = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.plain, target: self, action: #selector(TweetTableViewController.back(sender:)))
-//            self.navigationItem.leftBarButtonItem = newBackButton
-            let request: NSFetchRequest<TweetData> = TweetData.fetchRequest()
-            request.predicate = NSPredicate(format: "tweeter.identifier = %@", userID!)
-            let sortDescriptor = [NSSortDescriptor(key: "created", ascending: false)]
-            request.sortDescriptors = sortDescriptor
-            fetchedResultsController = NSFetchedResultsController<TweetData>(
-                fetchRequest: request,
-                managedObjectContext: (container?.viewContext)!,
-                sectionNameKeyPath: nil,
-                cacheName: nil
-            )
-            try? fetchedResultsController?.performFetch()
-            print("fetchedController set")
-            performUserTimelineRequest()
-//            reloadTweetData()
-            
-//            performUserTimelineRequest()
-        }
-//        NSFetchedResultsControllerDelegate.fetchRes
+        showTimeline()
         fetchedResultsController?.delegate = self
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if userID == nil {
-            self.tabBarController?.title = "Home"
-        }
-        else {
-            self.navigationItem.title = "Tweets"
-        }
-//        self.navigationItem.hidesBackButton = true
-    }
-    
-    
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     // MARK: - Table view data source
@@ -365,15 +277,9 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
         }
     }
     
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let tweetData = fetchedResultsController?.object(at: indexPath)
         let tweet = Tweet(tweetData!)
-//        print(tweet.identifier ?? "tweet not found")
-//        print(tweet.text ?? "text not found")
-//        print(tweet.tweeter?.name ?? "tweeter name not found")
-//        print(tweet)
-//        let cell: UITableViewCell
         if tweet.media.isEmpty {
             let cell = tableView.dequeueReusableCell(withIdentifier: "tweetCell", for: indexPath) as! TweetTableViewCell
             cell.tweet = tweet
@@ -390,56 +296,5 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
             return cell
         }
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        let backItem = UIBarButtonItem()
-//        backItem.title = "Back"
-//        navigationItem.backBarButtonItem = backItem
-//    }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

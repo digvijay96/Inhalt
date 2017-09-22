@@ -21,8 +21,6 @@ class FollowingTableViewController: UITableViewController {
         container?.performBackgroundTask{ [weak self] context in
             for userInfo in (self?.following)! {
                 _ = try? UserData.findOrCreate(matching: userInfo, in: context)
-                //                print("This is tweety")
-                //                print(tweety ?? "tweety not found")
             }
             try? context.save()
             //            self?.printDatabaseStatistics()
@@ -51,16 +49,8 @@ class FollowingTableViewController: UITableViewController {
             performRequest()
         }
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.register(UINib(nibName: "FollowingTableViewCell", bundle: nil), forCellReuseIdentifier: "userCell")
-        tableView.delegate = self
-        tableView.dataSource = self
-//        self.tabBarController?.navigationItem.title = "Following"
-        self.tabBarController?.title = "Following"
-        tableView.estimatedRowHeight = 90
-        tableView.rowHeight = UITableViewAutomaticDimension
+    
+    private func showProfileImage() {
         let profileImageUrl = UserDefaults.standard.url(forKey: "userProfileImage")
         if profileImageUrl != nil {
             print("Inside profile image")
@@ -78,23 +68,31 @@ class FollowingTableViewController: UITableViewController {
             let leftBarButton = UIBarButtonItem(customView: userProfileImage)
             self.navigationItem.leftBarButtonItem = leftBarButton
         }
+        
+    }
+
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.title = "Following"
+        tableView.register(UINib(nibName: "FollowingTableViewCell", bundle: nil), forCellReuseIdentifier: "userCell")
+        tableView.delegate = self
+        tableView.dataSource = self
+//        self.tabBarController?.navigationItem.title = "Following"
+        self.tabBarController?.title = "Following"
+        tableView.estimatedRowHeight = 90
+        tableView.rowHeight = UITableViewAutomaticDimension
+        showProfileImage()
         NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {[weak self] notification in
             self?.reloadFollowingData()
             }
         )
         reloadFollowingData()
-//        tableView.rowHeight = 90
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationItem.title = "Following"
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -141,45 +139,9 @@ class FollowingTableViewController: UITableViewController {
 
         return cell
     }
- 
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.performSegue(withIdentifier: "showUserTweets", sender: indexPath)
+        self.performSegue(withIdentifier: "showUserData", sender: indexPath)
     }
 
     
@@ -190,9 +152,9 @@ class FollowingTableViewController: UITableViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         let destinationViewController = segue.destination
-        if let tweetTableViewController = destinationViewController as? TweetTableViewController {
+        if let profileViewController = destinationViewController as? ProfileViewController {
             let indexPath = sender as? IndexPath
-            tweetTableViewController.userID = following[(indexPath?.row)!].id
+            profileViewController.userDetails = following[(indexPath?.row)!]
         }
     }
  

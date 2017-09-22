@@ -86,20 +86,13 @@ class TweetTableViewCell: UITableViewCell {
             if (tweet?.favorited)! {
                 let parameters: Dictionary<String, String> = ["id": (tweet?.identifier)!]
                 request = Request("remove_favorite", parameters)
-                request?.twitterPostRequest(before: (tweetDataDelegate?.didPressLikeOrRetweetButton)!)
+                request?.twitterPostRequest(before: {_ in })
                 tweetDataDelegate?.editCellDataAfterFavorite(self, changeLikeCountTo: Int(likeCountLabel.text!)!-1, changeFavouritedTo: false)
-    //            DispatchQueue.main.async { [weak self] in
-    //                self?.likeButton.setImage(UIImage(named: "Like"), for: .normal)
-    //                let likeCount = Int((self?.likeCountLabel.text!)!)
-    //                self?.likeCountLabel.text = String(likeCount! - 1)
-    //            }
-                
-    //            tweet?.favorited = false
             }
             else{
                 let parameters: Dictionary<String, String> = ["id": (tweet?.identifier)!]
                 request = Request("favorite", parameters)
-                request?.twitterPostRequest(before: (tweetDataDelegate?.didPressLikeOrRetweetButton)!)
+                request?.twitterPostRequest(before: { _ in })
                 tweetDataDelegate?.editCellDataAfterFavorite(self, changeLikeCountTo: Int(likeCountLabel.text!)!+1, changeFavouritedTo: true)
     //            tweetDataDelegate?.editCellData(self)
     //            DispatchQueue.main.async { [weak self] in
@@ -122,7 +115,7 @@ class TweetTableViewCell: UITableViewCell {
             if (tweet?.retweeted)! {
                 let parameters: Dictionary<String, String> = ["id": (tweet?.identifier)!]
                 request = Request("undo_retweet", parameters)
-                request?.twitterPostRequest(before: (tweetDataDelegate?.didPressLikeOrRetweetButton)!)
+                request?.twitterPostRequest(before: { _ in })
                 tweetDataDelegate?.editCellDataAfterRetweet(self, changeRetweetCountTo: Int(retweetCountLabel.text!)!-1, changeRetweetedTo: false)
     //            retweetButton.setImage(UIImage(named: "Retweet"), for: .normal)
     //            retweetCountLabel.text = String(1 + Int(retweetCountLabel.text!)!)
@@ -131,7 +124,7 @@ class TweetTableViewCell: UITableViewCell {
             else {
                 let parameters: Dictionary<String, String> = ["id": (tweet?.identifier)!]
                 request = Request("retweet", parameters)
-                request?.twitterPostRequest(before: (tweetDataDelegate?.didPressLikeOrRetweetButton)!)
+                request?.twitterPostRequest(before: { _ in })
                 tweetDataDelegate?.editCellDataAfterRetweet(self, changeRetweetCountTo: Int(retweetCountLabel.text!)!+1, changeRetweetedTo: true)
     //            retweetButton.setImage(UIImage(named: "Retweeted"), for: .normal)
     //            retweetCountLabel.text = String(Int(retweetCountLabel.text!)! - 1)

@@ -15,6 +15,8 @@ public struct User {
     public let profileImageUrl: URL
     public let description: String
     public let following: Bool
+    public let friendsCount: Int
+    public let followersCount: Int
     
     init?(data: NSDictionary?) {
         guard
@@ -23,7 +25,9 @@ public struct User {
             let id = data?.value(forKeyPath: TwitterKey.identifier) as? String,
             let urlString = data?.value(forKeyPath: TwitterKey.profileImageURL) as? String,
             let description = data?.value(forKeyPath: TwitterKey.description) as? String,
-            let following = data?.value(forKeyPath: TwitterKey.following) as? Bool
+            let following = data?.value(forKeyPath: TwitterKey.following) as? Bool,
+            let friendsCount = data?.value(forKeyPath: TwitterKey.friendsCount) as? Int,
+            let followersCount = data?.value(forKeyPath: TwitterKey.followersCount) as? Int
             else {
                 return nil
             }
@@ -35,7 +39,19 @@ public struct User {
         let url = URL(string: urlString)
         self.profileImageUrl = url!
         self.following = following
+        self.friendsCount = friendsCount
+        self.followersCount = followersCount
     }
+    
+//    required init(coder decoder: NSCoder) {
+//        self.name = decoder.decodeObject(forKey: "name") as? String ?? ""
+//        self.age = decoder.decodeInteger(forKey: "age")
+//    }
+//    
+//    func encode(with coder: NSCoder) {
+//        coder.encode(name, forKey: "name")
+//        coder.encode(age, forKey: "age")
+//    }
     
     init(_ user: UserData) {
         self.screenName = user.screenName!
@@ -45,6 +61,8 @@ public struct User {
         let url = URL(string: user.profileImageUrl!)
         self.profileImageUrl = url!
         self.following = user.following
+        self.followersCount = Int(user.followersCount)
+        self.friendsCount = Int(user.friendsCount)
     }
 
     struct TwitterKey {
@@ -55,5 +73,7 @@ public struct User {
         static let profileImageURL = "profile_image_url"
         static let description = "description"
         static let following = "following"
+        static let friendsCount = "friends_count"
+        static let followersCount = "followers_count"
     }
 }

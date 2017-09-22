@@ -28,8 +28,6 @@ class FetchedResultsTableViewController: UITableViewController, NSFetchedResults
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?)
     {
-        print("Object changed")
-        print(type.self)
         switch type {
         case .insert:
             tableView.insertRows(at: [newIndexPath!], with: .fade)
