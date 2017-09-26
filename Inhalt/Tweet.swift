@@ -40,9 +40,14 @@ public struct Tweet {
         self.text = text
         self.created = created
         self.identifier = identifier
+        if let retweetFavoriteCount = data?.value(forKeyPath: TwitterKey.retweetedFavorited) as? Int {
+            self.favouriteCount = retweetFavoriteCount
+        }
+        else {
+            self.favouriteCount = favouriteCount
+        }
         self.favorited = favorited
         self.retweeted = retweeted
-        self.favouriteCount = favouriteCount
         self.retweetCount = retweetCount
         self.media = Tweet.mediaItems(from: data?.value(forKeyPath: TwitterKey.media) as? NSArray)
     }
@@ -85,6 +90,7 @@ public struct Tweet {
         static let favorited = "favorited"
         static let retweeted = "retweeted"
         static let favourites = "favorite_count"
+        static let retweetedFavorited = "retweeted_status.favorite_count"
         static let retweets = "retweet_count"
     }
     

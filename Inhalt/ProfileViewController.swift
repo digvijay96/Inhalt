@@ -47,7 +47,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
             userName = userDetails?.name
         }
         if (followingCount)! > 1000 {
-            followingLabel.text = "\(followingCount!/1000)k followers"
+            followingLabel.text = "\(followingCount!/1000)k following"
         }else {
             followingLabel.text = "\(followingCount ?? 0) following"
         }

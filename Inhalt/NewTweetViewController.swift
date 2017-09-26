@@ -20,9 +20,8 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
     
     @IBAction func tweetButton(_ sender: UIButton) {
         let parameters: Dictionary<String, String> = ["status": tweetText.text]
-        request = Request("new_status", parameters)
-        request?.twitterPostRequest(before: { [weak self] tweet in
-            print(tweet)
+        request = Request(Request.RequestType.new_status.rawValue, parameters)
+        request?.performTweetsPostRequest(handler: { [weak self] tweet in
             self?.navigationController?.popViewController(animated: true)
             self?.dismiss(animated: true, completion: nil)
         })

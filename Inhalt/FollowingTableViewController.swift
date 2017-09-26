@@ -16,21 +16,24 @@ class FollowingTableViewController: UITableViewController {
     private var followingData = [UserData]()
     var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     
-    private func showUsers(_ following: [Any]) {
-        self.following = following as! [User]
-        container?.performBackgroundTask{ [weak self] context in
-            for userInfo in (self?.following)! {
-                _ = try? UserData.findOrCreate(matching: userInfo, in: context)
+    private func showUsers(_ following: [User]) {
+        self.following = following
+        print(self.following)
+        if following.count != followingData.count {
+            container?.performBackgroundTask{ [weak self] context in
+                for userInfo in (self?.following)! {
+                    _ = try? UserData.findOrCreate(matching: userInfo, in: context)
+                }
+                try? context.save()
+                //            self?.printDatabaseStatistics()
             }
-            try? context.save()
-            //            self?.printDatabaseStatistics()
         }
     }
     
     private func performRequest(){
         let parameters: Dictionary<String, String> = ["skip_status": "true"]
         request = Request("following", parameters)
-        request?.twitterGetRequest(before: showUsers)
+        request?.performUsersRequest(handler: showUsers)
     }
     
     func reloadFollowingData() {
@@ -124,8 +127,6 @@ class FollowingTableViewController: UITableViewController {
         cell.profileImageView?.image = nil
         let profileImageUrl = followingUser.profileImageUrl
         cell.profileImageView.sd_setImage(with: profileImageUrl, placeholderImage: nil)
-        
-        
 //        DispatchQueue.global(qos: .userInitiated).async {
 //            let profileImageUrl = followingUser.profileImageUrl
 //            if let imageData = try? Data(contentsOf: profileImageUrl) {

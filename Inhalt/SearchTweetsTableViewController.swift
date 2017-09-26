@@ -66,8 +66,8 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
         }
     }
     
-    private func showTweets(_ tweets: [Any]) {
-        self.tweets = tweets as! [Tweet]
+    private func showTweets(_ tweets: [Tweet]) {
+        self.tweets = tweets
         tableView.separatorStyle = UITableViewCellSeparatorStyle.singleLine
         activityIndicatorView.stopAnimating()
         DispatchQueue.main.async { [weak self] in
@@ -77,8 +77,8 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
 //        print(self.tweets)
     }
     
-    private func showTrends(_ trends: [Any]) {
-        self.trends = trends as! [String]
+    private func showTrends(_ trends: [String]) {
+        self.trends = trends
         let context = container?.viewContext
         let trendData = Trend.get(in: context!)
         for trend in trendData {
@@ -104,7 +104,12 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
     
     @IBAction func refreshControl(_ sender: Any) {
         refreshRequested = true
-        performSearchRequest()
+        if searchTerm != nil {
+            performSearchRequest()
+        }
+        else {
+            refreshControl?.endRefreshing()
+        }
     }
     
     
@@ -116,9 +121,9 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
     
     private func performSearchRequest() {
         let parameters: Dictionary<String, String> = ["q": searchTerm!, "count": "20"]
-        request = lastTwitterRequest?.newer ?? Request("search", parameters)
+        request = lastTwitterRequest?.newer ?? Request(Request.RequestType.search.rawValue, parameters)
         lastTwitterRequest = request
-        request?.twitterGetRequest(before: showTweets)
+        request?.performTweetsGetRequest(handler: showTweets)
         if(refreshRequested) {
             refreshControl?.endRefreshing()
         }
@@ -126,8 +131,8 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
     
     private func performTrendsRequest() {
         let parameters: Dictionary<String, String> = ["id": "1"]
-        request = Request("trends", parameters)
-        request?.twitterGetRequest(before: showTrends)
+        request = Request(Request.RequestType.trends.rawValue, parameters)
+        request?.performTrendsRequest(handler: showTrends)
     }
     
     private func showTrendsFromDb() {

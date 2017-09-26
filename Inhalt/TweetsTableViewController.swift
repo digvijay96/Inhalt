@@ -1,15 +1,15 @@
 //
-//  TweetTableTableViewController.swift
+//  TweetsTableViewController.swift
 //  Inhalt
 //
-//  Created by digvijay.s on 29/08/17.
+//  Created by digvijay.s on 26/09/17.
 //  Copyright © 2017 digvijay.s. All rights reserved.
 //
 
 import UIKit
 import CoreData
 
-class TweetTableViewController: FetchedResultsTableViewController, TweetTableViewCellProtocol {
+class TweetsTableViewController: UITableViewController, TweetTableViewCellProtocol {
     
     private var request :Request?
     var tweets = [Tweet]()
@@ -25,14 +25,14 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
             refreshControl?.endRefreshing()
         }
         self.tweets = tweets
-//        var oldTweets = try? TweetData.getAllTweets(in: (container?.viewContext)!)
+        //        var oldTweets = try? TweetData.getAllTweets(in: (container?.viewContext)!)
         
         container?.performBackgroundTask{ context in
-                for tweetInfo in (self.tweets) {
-                    _ = try? TweetData.findOrCreate(matching: tweetInfo, in: context)
-                }
-                try? context.save()
-//                self.printDatabaseStatistics()
+            for tweetInfo in (self.tweets) {
+                _ = try? TweetData.findOrCreate(matching: tweetInfo, in: context)
+            }
+            try? context.save()
+            //                self.printDatabaseStatistics()
         }
     }
     
@@ -58,7 +58,7 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
             }
         }
     }
-
+    
     
     @IBAction func refreshControl(_ sender: UIRefreshControl) {
         refreshRequested = true
@@ -124,14 +124,14 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
     
     @objc private func createNewTweet() {
         performSegue(withIdentifier: "newTweet", sender: self)
-//        let newTweetViewController = storyboard?.instantiateViewController(withIdentifier: "newTweetPopup") as! NewTweetViewController
-//        let navController = UINavigationController(rootViewController: newTweetViewController)
-//        present(navController, animated: true, completion: nil)
+        //        let newTweetViewController = storyboard?.instantiateViewController(withIdentifier: "newTweetPopup") as! NewTweetViewController
+        //        let navController = UINavigationController(rootViewController: newTweetViewController)
+        //        present(navController, animated: true, completion: nil)
     }
     
-    private func setTitleAndFetchedResultsController() {
+    private func setFetchedResultsController() {
         if timelineIsForUser() {
-//            self.navigationItem.hidesBackButton = true
+            self.navigationItem.hidesBackButton = true
             let request: NSFetchRequest<TweetData> = TweetData.fetchRequest()
             request.predicate = NSPredicate(format: "tweeter.identifier = %@", userID!)
             let sortDescriptor = [NSSortDescriptor(key: "created", ascending: false)]
@@ -160,7 +160,7 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
             try? fetchedResultsController?.performFetch()
             performRequest()
         }
-
+        
     }
     
     override func viewDidLoad() {
@@ -180,34 +180,27 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
                 strongSelf.container?.viewContext.mergeChanges(fromContextDidSave: notification)
             }
             
-//            print(notification.userInfo?.description ?? "No description found")
-//            if let insertedObjects = notification.userInfo?[NSInsertedObjectsKey] as? Set<NSManagedObject> {
-//                print(insertedObjects)
-//                if !insertedObjects.isEmpty && insertedObjects[insertedObjects.index(insertedObjects.startIndex, offsetBy: 0)] is TweetData {
-//                    print("Type cast successful")
-//                    self?.reloadTweetData()
-//                }
-//            }
-        
+            //            print(notification.userInfo?.description ?? "No description found")
+            //            if let insertedObjects = notification.userInfo?[NSInsertedObjectsKey] as? Set<NSManagedObject> {
+            //                print(insertedObjects)
+            //                if !insertedObjects.isEmpty && insertedObjects[insertedObjects.index(insertedObjects.startIndex, offsetBy: 0)] is TweetData {
+            //                    print("Type cast successful")
+            //                    self?.reloadTweetData()
+            //                }
+            //            }
+            
         })
-        setTitleAndFetchedResultsController()
-        fetchedResultsController?.delegate = self
+        setFetchedResultsController()
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-
-    // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return fetchedResultsController?.sections?.count ?? 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-//        print(fetchedResultsController?.sections?.count ?? "")
+        //        print(fetchedResultsController?.sections?.count ?? "")
         if let sections = fetchedResultsController?.sections, sections.count > 0 {
             return sections[section].numberOfObjects
         } else {
@@ -229,10 +222,10 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
             cell.tweet = tweet
             cell.tweetDataDelegate = self
             //            if let tweetCell = cell as? TweetWithMediaTableViewCell {
-//                tweetCell.tweet = tweet
-//            }
+            //                tweetCell.tweet = tweet
+            //            }
             return cell
         }
     }
-
+    
 }

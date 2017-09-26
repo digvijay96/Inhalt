@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Inhalt/TweetTableViewCell.swift"
-            timestampString = "527678886.297991"
+            timestampString = "528115002.121418"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "230"
-            endingLineNumber = "230">
+            startingLineNumber = "222"
+            endingLineNumber = "222">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -72,11 +72,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Inhalt/Tweet.swift"
-            timestampString = "527074773.826225"
+            timestampString = "528024287.808984"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
             landmarkName = "mediaItems(from:)"
             landmarkType = "7">
             <Locations>
@@ -295,70 +295,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Inhalt/TweetTableViewController.swift"
-            timestampString = "527764250.558547"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "105"
-            endingLineNumber = "105"
-            landmarkName = "editCellDataAfterFavorite(_:changeLikeCountTo:changeFavouritedTo:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Inhalt.TweetTableViewController.editCellDataAfterFavorite (Any, changeLikeCountTo : Swift.Int, changeFavouritedTo : Swift.Bool) -&gt; ()"
-                  moduleName = "Inhalt"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/digvijay.s/Inhalt/Inhalt/TweetTableViewController.swift"
-                  timestampString = "526918273.366291"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "64"
-                  endingLineNumber = "64"
-                  offsetFromSymbolStart = "790">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Inhalt.TweetTableViewController.editCellDataAfterFavorite (Any, changeLikeCountTo : Swift.Int, changeFavouritedTo : Swift.Bool) -&gt; ()"
-                  moduleName = "Inhalt"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/digvijay.s/Inhalt/Inhalt/TweetTableViewController.swift"
-                  timestampString = "526918273.368217"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "64"
-                  endingLineNumber = "64"
-                  offsetFromSymbolStart = "1867">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Inhalt/TweetWithMediaTableViewCell.swift"
-            timestampString = "527771281.628855"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
-            landmarkName = "updateUI()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Inhalt/DataToObjectConverter.swift"
             timestampString = "527073457.115965"
             startingColumnNumber = "9223372036854775807"
@@ -367,54 +303,6 @@
             endingLineNumber = "16"
             landmarkName = "convertTweetDataToTweet(_:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Inhalt/Tweet.swift"
-            timestampString = "527072544.889949"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "26"
-            endingLineNumber = "26"
-            landmarkName = "init(data:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Inhalt.Tweet.init (data : Swift.Optional&lt;__ObjC.NSDictionary&gt;) -&gt; Swift.Optional&lt;Inhalt.Tweet&gt;"
-                  moduleName = "Inhalt"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/digvijay.s/Inhalt/Inhalt/Tweet.swift"
-                  timestampString = "527072554.280363"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "26"
-                  endingLineNumber = "26"
-                  offsetFromSymbolStart = "41">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Inhalt.Tweet.init (data : Swift.Optional&lt;__ObjC.NSDictionary&gt;) -&gt; Swift.Optional&lt;Inhalt.Tweet&gt;"
-                  moduleName = "Inhalt"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/digvijay.s/Inhalt/Inhalt/Tweet.swift"
-                  timestampString = "527072554.286292"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "26"
-                  endingLineNumber = "26"
-                  offsetFromSymbolStart = "1140">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

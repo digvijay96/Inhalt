@@ -22,7 +22,6 @@ class TweetWithMediaTableViewCell: UITableViewCell {
     @IBOutlet weak var retweetButton: UIButton!
     @IBOutlet weak var retweetCountLabel: UILabel!
     
-    
     private var request: Request?
     var tweet: Tweet? {
         didSet{
@@ -77,7 +76,6 @@ class TweetWithMediaTableViewCell: UITableViewCell {
             formatter.timeStyle = .short
         }
         createdLabel?.text = formatter.string(from: created!)
-        
         tweetImageView.image = nil
         let imageMediaUrl = tweet?.media[0].url
         if id == tweet?.identifier {
@@ -90,14 +88,14 @@ class TweetWithMediaTableViewCell: UITableViewCell {
         if Reachability.isConnectedToNetwork() {
             if (tweet?.favorited)! {
                 let parameters: Dictionary<String, String> = ["id": (tweet?.identifier)!]
-                request = Request("remove_favorite", parameters)
-                request?.twitterPostRequest(before: { _ in })
+                request = Request(Request.RequestType.remove_favorite.rawValue, parameters)
+                request?.performTweetsPostRequest(handler: {_ in })
                 tweetDataDelegate?.editCellDataAfterFavorite(self, changeLikeCountTo: Int(likeCountLabel.text!)!-1, changeFavouritedTo: true)
             }
             else{
                 let parameters: Dictionary<String, String> = ["id": (tweet?.identifier)!]
-                request = Request("favorite", parameters)
-                request?.twitterPostRequest(before: { _ in })
+                request = Request(Request.RequestType.favorite.rawValue, parameters)
+                request?.performTweetsPostRequest(handler: { _ in })
                 tweetDataDelegate?.editCellDataAfterFavorite(self, changeLikeCountTo: Int(likeCountLabel.text!)!+1, changeFavouritedTo: true)
                 
             }
@@ -109,8 +107,8 @@ class TweetWithMediaTableViewCell: UITableViewCell {
         if Reachability.isConnectedToNetwork() {
             if (tweet?.retweeted)! {
                 let parameters: Dictionary<String, String> = ["id": (tweet?.identifier)!]
-                request = Request("undo_retweet", parameters)
-                request?.twitterPostRequest(before: { _ in })
+                request = Request(Request.RequestType.undo_retweet.rawValue, parameters)
+                request?.performTweetsPostRequest(handler: { _ in })
                 tweetDataDelegate?.editCellDataAfterRetweet(self, changeRetweetCountTo: Int(retweetCountLabel.text!)!-1, changeRetweetedTo: true)
                 
                 //            retweetButton.setImage(UIImage(named: "Retweet"), for: .normal)
@@ -119,8 +117,8 @@ class TweetWithMediaTableViewCell: UITableViewCell {
             }
             else {
                 let parameters: Dictionary<String, String> = ["id": (tweet?.identifier)!]
-                request = Request("retweet", parameters)
-                request?.twitterPostRequest(before: { _ in })
+                request = Request(Request.RequestType.retweet.rawValue, parameters)
+                request?.performTweetsPostRequest(handler: { _ in })
                 tweetDataDelegate?.editCellDataAfterRetweet(self, changeRetweetCountTo: Int(retweetCountLabel.text!)!+1, changeRetweetedTo: true)
                 //            retweetButton.setImage(UIImage(named: "Retweeted"), for: .normal)
                 //            retweetCountLabel.text = String(Int(retweetCountLabel.text!)! - 1)

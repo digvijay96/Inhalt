@@ -62,8 +62,9 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gdR-pU-LJH">
+                                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gdR-pU-LJH">
                                         <rect key="frame" x="0.0" y="61.5" width="446" height="223"/>
+                                        <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="gdR-pU-LJH" secondAttribute="height" multiplier="2:1" id="1FT-VI-u6N"/>
                                         </constraints>
@@ -92,7 +93,7 @@
                                             <action selector="likeButtonClicked:" destination="BKh-Zd-HGH" eventType="touchUpInside" id="p0U-XL-iiH"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jfH-KU-mPZ">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Like" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jfH-KU-mPZ">
                                         <rect key="frame" x="30" y="2.5" width="30" height="15"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="15" id="BO4-cC-tV9"/>
@@ -118,7 +119,7 @@
                                             <action selector="retweetButtonClicked:" destination="BKh-Zd-HGH" eventType="touchUpInside" id="tle-ow-rvl"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YHf-Oj-Whp">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Retweet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YHf-Oj-Whp">
                                         <rect key="frame" x="30" y="4" width="30" height="12"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="30" id="L47-W6-MQ3"/>

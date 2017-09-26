@@ -86,22 +86,6 @@ public class Request : NSObject {
         return trends
     }
     
-    private func parseData (_ results: Any?) -> [Any] {
-        var parsedResults: [Any]
-        switch requestType {
-        case "following":
-            parsedResults = parseUsers(results)
-        case "verify_credentials":
-            parsedResults = parseUsers(results)
-        case "trends":
-            parsedResults = parseTrends(results)
-        default:
-//            print(results)
-            parsedResults = parseTweets(results)
-        }
-        return parsedResults
-    }
-    
     public var newer: Request? {
         if max_id == nil {
             if parameters[Key.sinceID] != nil {
@@ -122,62 +106,129 @@ public class Request : NSObject {
         return Request(requestType, newParameters)
     }
     
-    public func twitterGetRequest(before handler: @escaping ([Any]) -> Void) {
-        performRequest(RequestTypes[requestType]!, "GET", handler: handler)
-    }
-    
-    public func twitterPostRequest(before handler: @escaping ([Any]) -> Void) {
-        performRequest(RequestTypes[requestType]!, "POST" ,handler: handler)
-    }
-    
-//    public func getFollowers(before handler: @escaping ([User]) -> Void){
-//        print("Entered get followers")
-//        performGetRequest(RequestTypes.followers, handler: handler)
-//    }
-    
-    public func performRequest(_ requestType: String,_ requestMethod: String, handler: @escaping ([Any]) -> Void) {
+    public func performTrendsRequest(handler: @escaping ([String]) -> Void) {
         if let twitterAccountId = Twitter.sharedInstance().sessionStore.session()?.userID {
             let client = TWTRAPIClient(userID: twitterAccountId)
             let requestURL = Constants.twitterURLPrefix + requestType + Constants.JSONExtension
+            print(requestURL)
             var clientError : NSError?
 
-            let request = client.urlRequest(withMethod: requestMethod, url: requestURL, parameters: parameters, error: &clientError)
+            let request = client.urlRequest(withMethod: "GET", url: requestURL, parameters: parameters, error: &clientError)
             DispatchQueue.main.async {
                 client.sendTwitterRequest(request) { [weak self] (response, responseData, error) -> Void in
-//                    if let strongSelf = self {
-//                        
-//                    }
                     if let err = error {
                         print("Error: \(err.localizedDescription)")
                     } else {
                         
                         let responseJsonData = try? JSONSerialization.jsonObject(with: responseData!, options: [])
-//                        print("network call")
-                        //let backToString = String(data: responseData!, encoding: String.Encoding.utf8) as String!
-//                        print(responseJsonData ?? "Not set")
-//                        if self?.requestType == "following" {
-//                            handler((self?.parseUsers(responseJsonData))!)
-//                        }
-//                        else{
-//                            handler((self?.parseTweets(responseJsonData))!)
-//                        }
                         if Request.requestCompleted {
                             Request.requestCompleted = false
                             if let strongSelf = self {
-                                handler((strongSelf.parseData(responseJsonData)))
+                                handler((strongSelf.parseTrends(responseJsonData)))
                             }
                         }
-            //                      handler(responseJsonData)
-                        //print(backToString ?? "Not converted")
-                        //print("User Timeline: \(responseData ?? ))")
                     }
                     Request.requestCompleted = true
                 }
             }
         } else {
         print("Not logged in")
-        // Not logged in
         }
+    }
+    
+    public func performTweetsPostRequest(handler: @escaping ([Tweet]) -> Void) {
+        if let twitterAccountId = Twitter.sharedInstance().sessionStore.session()?.userID {
+            let client = TWTRAPIClient(userID: twitterAccountId)
+            let requestURL = Constants.twitterURLPrefix + requestType + Constants.JSONExtension
+            print(requestURL)
+            var clientError : NSError?
+            
+            let request = client.urlRequest(withMethod: "POST", url: requestURL, parameters: parameters, error: &clientError)
+            DispatchQueue.main.async {
+                client.sendTwitterRequest(request) { [weak self] (response, responseData, error) -> Void in
+                    if let err = error {
+                        print("Error: \(err.localizedDescription)")
+                    } else {
+                        
+                        let responseJsonData = try? JSONSerialization.jsonObject(with: responseData!, options: [])
+                        if Request.requestCompleted {
+                            Request.requestCompleted = false
+                            if let strongSelf = self {
+                                handler((strongSelf.parseTweets(responseJsonData)))
+                            }
+                        }
+                    }
+                    Request.requestCompleted = true
+                }
+            }
+        } else {
+            print("Not logged in")
+        }
+        
+    }
+    
+    public func performTweetsGetRequest(handler: @escaping ([Tweet]) -> Void) {
+        if let twitterAccountId = Twitter.sharedInstance().sessionStore.session()?.userID {
+            let client = TWTRAPIClient(userID: twitterAccountId)
+            let requestURL = Constants.twitterURLPrefix + requestType + Constants.JSONExtension
+            print(requestURL)
+            var clientError : NSError?
+            
+            let request = client.urlRequest(withMethod: "GET", url: requestURL, parameters: parameters, error: &clientError)
+            DispatchQueue.main.async {
+                client.sendTwitterRequest(request) { [weak self] (response, responseData, error) -> Void in
+                    //                    if let strongSelf = self {
+                    //
+                    //                    }
+                    if let err = error {
+                        print("Error: \(err.localizedDescription)")
+                    } else {
+                        
+                        let responseJsonData = try? JSONSerialization.jsonObject(with: responseData!, options: [])
+                        if Request.requestCompleted {
+                            Request.requestCompleted = false
+                            if let strongSelf = self {
+                                handler((strongSelf.parseTweets(responseJsonData)))
+                            }
+                        }
+                    }
+                    Request.requestCompleted = true
+                }
+            }
+        } else {
+            print("Not logged in")
+        }
+
+    }
+    
+    public func performUsersRequest(handler: @escaping ([User]) -> Void) {
+        if let twitterAccountId = Twitter.sharedInstance().sessionStore.session()?.userID {
+            let client = TWTRAPIClient(userID: twitterAccountId)
+            let requestURL = Constants.twitterURLPrefix + requestType + Constants.JSONExtension
+            var clientError : NSError?
+            
+            let request = client.urlRequest(withMethod: "GET", url: requestURL, parameters: parameters, error: &clientError)
+            DispatchQueue.main.async {
+                client.sendTwitterRequest(request) { [weak self] (response, responseData, error) -> Void in
+                    if let err = error {
+                        print("Error: \(err.localizedDescription)")
+                    } else {
+                        
+                        let responseJsonData = try? JSONSerialization.jsonObject(with: responseData!, options: [])
+                        if Request.requestCompleted {
+                            Request.requestCompleted = false
+                            if let strongSelf = self {
+                                handler((strongSelf.parseUsers(responseJsonData)))
+                            }
+                        }
+                    }
+                    Request.requestCompleted = true
+                }
+            }
+        } else {
+            print("Not logged in")
+        }
+
     }
     
     private struct Constants {
@@ -190,24 +241,20 @@ public class Request : NSObject {
         static let count = "count"
     }
     
-    let RequestTypes: Dictionary<String, String> = [
-        "home" : "statuses/home_timeline",
-        "tweets" : "statuses",
-        "search" : "search/tweets",
-        "following" : "friends/list",
-        "user_timeline" : "statuses/user_timeline",
-        "trends" : "trends/place",
-        "favorite" : "favorites/create",
-        "remove_favorite" : "favorites/destroy",
-        "retweet" : "statuses/retweet",
-        "undo_retweet" : "statuses/unretweet",
-        "new_status" : "statuses/update",
-        "user_details": "users/show",
-        "verify_credentials": "account/verify_credentials"
-    ]
-    
-    struct HandlerFunction {
-        static let tweets = parseTweets
+    enum RequestType: String {
+        case home = "statuses/home_timeline"
+        case tweets = "statuses"
+        case search = "search/tweets"
+        case following = "friends/list"
+        case user_timeline = "statuses/user_timeline"
+        case trends = "trends/place"
+        case favorite = "favorites/create"
+        case remove_favorite = "favorites/destroy"
+        case retweet = "statuses/retweet"
+        case undo_retweet = "statuses/unretweet"
+        case new_status = "statuses/update"
+        case user_details = "users/show"
+        case verify_credentials = "account/verify_credentials"
     }
     
     struct TwitterKey {

@@ -12,9 +12,8 @@ class MainTabBarViewController: UITabBarController {
     
     var request: Request?
     
-    private func saveUserData(_ user: [Any]) {
-        let userData = user as! [User]
-        let loggedInUser = userData[0]
+    private func saveUserData(_ user: [User]) {
+        let loggedInUser = user[0]
         let profileImageUrl = loggedInUser.profileImageUrl
 //        let imageData = try? Data(contentsOf: profileImageUrl)
         UserDefaults.standard.set(profileImageUrl, forKey: "userProfileImage")
@@ -29,8 +28,8 @@ class MainTabBarViewController: UITabBarController {
 //        let userID = UserDefaults.standard.string(forKey: "userID")
 //        if userID != nil {
         let parameters: Dictionary<String, String> = [:]
-        request = Request("verify_credentials", parameters)
-        request?.twitterGetRequest(before: saveUserData)
+        request = Request(Request.RequestType.verify_credentials.rawValue, parameters)
+        request?.performUsersRequest(handler: saveUserData)
 //        }
     }
 

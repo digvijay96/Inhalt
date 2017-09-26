@@ -13,7 +13,7 @@ class FetchedResultsTableViewController: UITableViewController, NSFetchedResults
 
     public func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
     {
-        print("Updates started")
+//        print("Updates started")
         tableView.beginUpdates()
     }
     

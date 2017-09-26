@@ -82,7 +82,7 @@
                                             <action selector="likeButtonClicked:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="quU-3Y-kY8"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DIZ-7e-cid">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Like" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DIZ-7e-cid">
                                         <rect key="frame" x="30" y="2.5" width="30" height="15"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="30" id="7Xc-1d-hkc"/>
@@ -108,7 +108,7 @@
                                             <action selector="retweetButtonClicked:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="2OM-nT-HBU"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LnY-on-OZU">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Retweet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LnY-on-OZU">
                                         <rect key="frame" x="30" y="4" width="30" height="12"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="30" id="07L-eK-4cG"/>
