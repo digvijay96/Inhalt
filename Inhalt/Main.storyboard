@@ -274,12 +274,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d3b-gI-Sbu">
-                                <rect key="frame" x="0.0" y="64" width="414" height="672"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d3b-gI-Sbu">
+                                <rect key="frame" x="0.0" y="64" width="414" height="623"/>
                             </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="d3b-gI-Sbu" firstAttribute="leading" secondItem="dvf-UF-q5I" secondAttribute="leadingMargin" constant="-20" id="DEq-6k-mFF"/>
+                            <constraint firstItem="d3b-gI-Sbu" firstAttribute="top" secondItem="0ba-iT-Sah" secondAttribute="bottom" id="EIV-2M-h03"/>
+                            <constraint firstItem="sZF-jJ-dJy" firstAttribute="top" secondItem="d3b-gI-Sbu" secondAttribute="bottom" id="Wn3-I5-Oq4"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="d3b-gI-Sbu" secondAttribute="trailing" constant="-20" id="ith-hE-UxE"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Bd2-2r-zln"/>
                     <connections>
@@ -289,7 +294,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7xO-zi-go1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5886.9565217391309" y="1172.2826086956522"/>
+            <point key="canvasLocation" x="5885.6000000000004" y="1171.6641679160421"/>
         </scene>
         <!--Following-->
         <scene sceneID="cjh-Yg-PeQ">

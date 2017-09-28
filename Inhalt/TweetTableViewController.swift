@@ -34,6 +34,7 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
                 try? context.save()
 //                self.printDatabaseStatistics()
         }
+        
     }
     
     private func timelineIsForUser() -> Bool {
