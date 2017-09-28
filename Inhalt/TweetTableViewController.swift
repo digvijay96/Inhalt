@@ -18,23 +18,22 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
     private var lastTwitterRequest: Request?
     private var refreshRequested: Bool = false
     var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
+    var writingContext: NSManagedObjectContext?
     var fetchedResultsController: NSFetchedResultsController<TweetData>?
     
     private func saveTweets(_ tweets: [Tweet]) {
         if refreshRequested {
             refreshControl?.endRefreshing()
         }
+        
         self.tweets = tweets
-//        var oldTweets = try? TweetData.getAllTweets(in: (container?.viewContext)!)
-        
-        container?.performBackgroundTask{ context in
-                for tweetInfo in (self.tweets) {
-                    _ = try? TweetData.findOrCreate(matching: tweetInfo, in: context)
+        writingContext?.perform { [weak self] in
+                for tweetInfo in (self?.tweets)! {
+                    _ = try? TweetData.findOrCreate(matching: tweetInfo, in: (self?.writingContext!)!)
                 }
-                try? context.save()
+                try? self?.writingContext?.save()
+            }
 //                self.printDatabaseStatistics()
-        }
-        
     }
     
     private func timelineIsForUser() -> Bool {
@@ -82,12 +81,13 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
         
         let indexPath = tableView.indexPath(for: tweetTableViewCell)
         let changedTweet = fetchedResultsController?.object(at: indexPath!)
-        container?.performBackgroundTask{context in
-            let tweet = try? TweetData.findOrCreate(matching: Tweet(changedTweet!), in: context)
+        writingContext?.perform { [weak self] in
+            let tweet = try? TweetData.findOrCreate(matching: Tweet(changedTweet!), in: (self?.writingContext!)!)
             tweet?.favorited = favorite
             tweet?.favouriteCount = Int64(favoriteCount)
-            print(self.fetchedResultsController?.delegate ?? "Not found")
-            try? context.save()
+            print(self?
+                .fetchedResultsController?.delegate ?? "Not found")
+            try? self?.writingContext?.save()
         }
     }
     
@@ -101,11 +101,12 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
         }
         let indexPath = tableView.indexPath(for: tweetTableViewCell)
         let changedTweet = fetchedResultsController?.object(at: indexPath!)
-        container?.performBackgroundTask{context in
-            let tweet = try? TweetData.findOrCreate(matching: Tweet(changedTweet!), in: context)
+        
+        writingContext?.perform { [weak self] in
+            let tweet = try? TweetData.findOrCreate(matching: Tweet(changedTweet!), in: (self?.writingContext!)!)
             tweet?.retweeted = retweet
             tweet?.retweetCount = Int64(retweetCount)
-            try? context.save()
+            try? self?.writingContext?.save()
         }
     }
     
@@ -173,6 +174,7 @@ class TweetTableViewController: FetchedResultsTableViewController, TweetTableVie
         tableView.dataSource = self
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
+        writingContext = (UIApplication.shared.delegate as? AppDelegate)?.writeContext
         
         NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
             [weak self]

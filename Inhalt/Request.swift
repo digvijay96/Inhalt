@@ -118,6 +118,7 @@ public class Request : NSObject {
                 client.sendTwitterRequest(request) { [weak self] (response, responseData, error) -> Void in
                     if let err = error {
                         print("Error: \(err.localizedDescription)")
+                        handler([])
                     } else {
                         
                         let responseJsonData = try? JSONSerialization.jsonObject(with: responseData!, options: [])
@@ -148,6 +149,7 @@ public class Request : NSObject {
                 client.sendTwitterRequest(request) { [weak self] (response, responseData, error) -> Void in
                     if let err = error {
                         print("Error: \(err.localizedDescription)")
+                        handler([])
                     } else {
                         
                         let responseJsonData = try? JSONSerialization.jsonObject(with: responseData!, options: [])

@@ -14,6 +14,7 @@ import TwitterKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var managedObjectContext: NSManagedObjectContext?
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -84,7 +85,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
+        self.managedObjectContext = container.newBackgroundContext()
         return container
+    }()
+    
+    lazy var writeContext: NSManagedObjectContext = {
+        return self.managedObjectContext!
     }()
 
     // MARK: - Core Data Saving support

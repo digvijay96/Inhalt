@@ -9,12 +9,13 @@
 import UIKit
 import CoreData
 
-class FollowingTableViewController: UITableViewController {
+class FollowingTableViewController: FetchedResultsTableViewController {
     
     private var request :Request?
     private var following = [User]()
     private var followingData = [UserData]()
     var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
+    var fetchedResultsController: NSFetchedResultsController<UserData>?
     
     private func showUsers(_ following: [User]) {
         self.following = following
@@ -32,26 +33,26 @@ class FollowingTableViewController: UITableViewController {
     
     private func performRequest(){
         let parameters: Dictionary<String, String> = ["skip_status": "true"]
-        request = Request("following", parameters)
+        request = Request(Request.RequestType.following.rawValue, parameters)
         request?.performUsersRequest(handler: showUsers)
     }
     
-    func reloadFollowingData() {
-        self.followingData = try! UserData.getAllFollowingUsers(in: (container?.viewContext)!)
-        if (self.followingData.count) > 0 {
-            //            print(self.tweetData)
-            self.following = []
-            for followingUser in self.followingData {
-                self.following.append(User(followingUser))
-            }
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
-        else  {
-            performRequest()
-        }
-    }
+//    func reloadFollowingData() {
+//        self.followingData = try! UserData.getAllFollowingUsers(in: (container?.viewContext)!)
+//        if (self.followingData.count) > 0 {
+//            //            print(self.tweetData)
+//            self.following = []
+//            for followingUser in self.followingData {
+//                self.following.append(User(followingUser))
+//            }
+//            DispatchQueue.main.async {
+//                self.tableView.reloadData()
+//            }
+//        }
+//        else  {
+//            performRequest()
+//        }
+//    }
     
     private func showProfileImage() {
         let profileImageUrl = UserDefaults.standard.url(forKey: "userProfileImage")
@@ -86,11 +87,25 @@ class FollowingTableViewController: UITableViewController {
         tableView.estimatedRowHeight = 90
         tableView.rowHeight = UITableViewAutomaticDimension
         showProfileImage()
+        let request: NSFetchRequest<UserData> = UserData.fetchRequest()
+        request.predicate = NSPredicate(format: "following = %d", 1)
+        let sortDescriptor = [NSSortDescriptor(key: "name", ascending: true)]
+        request.sortDescriptors = sortDescriptor
+        fetchedResultsController = NSFetchedResultsController<UserData>(
+            fetchRequest: request,
+            managedObjectContext: (container?.viewContext)!,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+        fetchedResultsController?.delegate = self
+        try? fetchedResultsController?.performFetch()
         NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {[weak self] notification in
-            self?.reloadFollowingData()
+                if let strongSelf = self {
+                    strongSelf.container?.viewContext.mergeChanges(fromContextDidSave: notification)
+                }
             }
         )
-        reloadFollowingData()
+        performRequest()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -107,26 +122,30 @@ class FollowingTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        return fetchedResultsController?.sections?.count ?? 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return following.count
+        if let sections = fetchedResultsController?.sections, sections.count > 0 {
+            return sections[section].numberOfObjects
+        } else {
+            return 0
+        }
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let followingUser = following[indexPath.row]
+        let followingUser = fetchedResultsController?.object(at: indexPath)
         let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath) as! FollowingTableViewCell
 
         // Configure the cell...
-        cell.tweeterNameLabel?.text = followingUser.name
-        cell.tweeterHandleLabel?.text = followingUser.screenName
-        cell.tweeterDescriptionLabel?.text = followingUser.description
+        cell.tweeterNameLabel?.text = followingUser?.name
+        cell.tweeterHandleLabel?.text = followingUser?.screenName
+        cell.tweeterDescriptionLabel?.text = followingUser?.descriptionData
         cell.profileImageView?.image = nil
-        let profileImageUrl = followingUser.profileImageUrl
-        cell.profileImageView.sd_setImage(with: profileImageUrl, placeholderImage: nil)
+        let profileImageUrl = followingUser?.profileImageUrl
+        cell.profileImageView.sd_setImage(with: URL(string: profileImageUrl!), placeholderImage: nil)
 //        DispatchQueue.global(qos: .userInitiated).async {
 //            let profileImageUrl = followingUser.profileImageUrl
 //            if let imageData = try? Data(contentsOf: profileImageUrl) {
@@ -155,7 +174,7 @@ class FollowingTableViewController: UITableViewController {
         let destinationViewController = segue.destination
         if let profileViewController = destinationViewController as? ProfileViewController {
             let indexPath = sender as? IndexPath
-            profileViewController.userDetails = following[(indexPath?.row)!]
+            profileViewController.userDetails = User((fetchedResultsController?.object(at: indexPath!))!)
         }
     }
  

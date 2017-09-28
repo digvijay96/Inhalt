@@ -68,6 +68,9 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
     
     private func showTweets(_ tweets: [Tweet]) {
         self.tweets = tweets
+        if(refreshRequested) {
+            refreshControl?.endRefreshing()
+        }
         tableView.separatorStyle = UITableViewCellSeparatorStyle.singleLine
         activityIndicatorView.stopAnimating()
         DispatchQueue.main.async { [weak self] in
@@ -124,9 +127,7 @@ class SearchTweetsTableViewController: UITableViewController, UISearchBarDelegat
         request = lastTwitterRequest?.newer ?? Request(Request.RequestType.search.rawValue, parameters)
         lastTwitterRequest = request
         request?.performTweetsGetRequest(handler: showTweets)
-        if(refreshRequested) {
-            refreshControl?.endRefreshing()
-        }
+        
     }
     
     private func performTrendsRequest() {
